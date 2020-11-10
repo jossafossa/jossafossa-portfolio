@@ -2,7 +2,7 @@
 
 	<?php if ($projects): ?>
 		<div class="projects">
-			<span tooltip="What is this doing here!">?></span>
+			<span tooltip="Wait! What is this doing here?">?></span>
 			<h1 class="page-title">My work</h1>
 		
 			<div class="projects-container">
