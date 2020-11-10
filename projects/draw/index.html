@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Probeersel</title>
+	<meta name="viewport" content=" user-scalable=0, initial-scale=1" />
+	<meta name="author" content="SitePoint">
+	<link rel="stylesheet" href="css/styles.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+</head>
+<body>
+	<div id="notifications"></div>
+	<div id="paper">
+		<canvas id="1" height='1080px' width="1920px">
+	</div>	
+	<div id="cursors">
+		<div class="cursor"></div>
+	</div>
+	<menu>
+		<div id="hide-menu"></div>
+		<div id="shortcuts" class="menu-item-group">
+			<div class="menu-toggle menu-item">shortcuts<span class="fa"></span></div>
+			<!-- <div class="menu-item">toggle rainbow colors <div class="shortcut"n>r</div></div>
+			<div class="menu-item">toggle symmetry <div class="shortcut">s</div></div>
+			<div class="menu-item">toggle incrementation <div class="shortcut">i</div></div>
+			<div class="menu-item">toggle stripes <div class="shortcut">t</div></div>
+			<div class="menu-item">undo <div class="shortcut">z</div></div>
+			<div class="menu-item">linethickness <div class="shortcut">]</div> <div class="shortcut">[</div></div> -->
+		</div>
+		<div id="toggle-btns" class="menu-item-group">
+			<div class="menu-toggle menu-item">options<span class="fa"></span></div>
+		</div>
+		<div class="devider"></div>
+		<div id="line-properties">
+			<label for="lineThickness"> Line thickness</label><input id="lineThickness" type="number" value="5">
+			<label for="incrementation-intesity"> incremetation intensity</label><input id="incrementation-intensity" type="number" value="5">
+		</div>
+	</menu>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="js/cookie.js"></script>
+	<script src="js/scripts.js"></script>
+</body>
+</html>

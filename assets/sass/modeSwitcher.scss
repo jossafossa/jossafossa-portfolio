@@ -1,0 +1,41 @@
+.modeSwitcher {
+    --ms-bgcolor:black;
+    --ms-color:white;
+    --ms-width:4rem;
+    --ms-height:2rem;
+    --ms-margin:.25rem;
+    transform:translateX(0);
+    position:relative;
+}
+
+.modeSwitcher, .modeSwitcher:before {
+    content:"";
+    width:var(--ms-width);
+    background-color:var(--ms-bgcolor);
+    height:var(--ms-height);
+    border-radius:100px;
+}
+
+.modeSwitcher:before {  
+    position:absolute;
+    z-index:-1;
+    cursor:pointer;
+}
+
+.modeSwitcher:after {
+    content:"";
+    height:calc(var(--ms-height) - var(--ms-margin) * 2);
+    width:calc(var(--ms-height) - var(--ms-margin) * 2);
+    border-radius:50%;
+    background-color:var(--ms-color);
+    position:absolute;
+    top:var(--ms-margin);
+    left:var(--ms-margin);
+    transition:1s;
+    cursor:pointer;
+}
+
+.modeSwitcher:checked:after {
+    left: calc(var(--ms-width) - var(--ms-height) + var(--ms-margin));
+}
+  

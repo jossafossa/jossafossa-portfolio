@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Todo's</title>
+	<style>
+		body {
+			margin:0;
+			padding:0;
+			font-family:'Open Sans', sans-serif;
+			background-color:#242424;
+			color:white;
+			padding:1rem;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		h1,h2,h3,h4,h5,h6 {
+			margin:0;
+		}
+
+		.todos {
+			margin:1rem;
+			margin:auto;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+			height:100vh;
+		}
+
+		.year {
+			min-width:700px;
+			margin-right:1rem;
+			background-color:rgba(0,0,0,0.2);
+			border-radius:2rem;
+			padding:1rem;
+
+		}
+
+		.year > h1 {
+			text-align: center;
+			text-transform: uppercase;
+			margin-top:1rem;
+			margin-bottom:2rem;
+		}
+
+		.period {
+			display:flex;
+			align-items: stretch;
+			border-top:1rem solid rgba(255,255,255,0.1);
+		}
+
+		.period > h2 {
+			padding:1rem;
+			height:100%;
+			display:block;
+		}
+
+		.subject {
+			min-height:12rem;
+			flex:1;
+			padding:1rem;
+			background-color:rgba(255,255,255,0.1);
+			border-radius: 0 0 1rem 1rem;
+			margin-left:1rem;
+			margin-bottom:1rem;
+		}
+
+		.year > .period:nth-last-child(1) > .subject {
+			margin-bottom:0;
+		}
+
+
+	</style>
+</head>
+<body>
+	<div class="todos">
+		
+	</div>
+	<script src="todos.js"></script>
+	<script>
+		let todoElem = document.querySelector(".todos");
+
+		for( let yearName in data ) {
+			let year = data[yearName];
+			console.log(year);
+
+			let yearElem = document.createElement("div");
+			yearElem.classList.add("year");
+
+			let title = document.createElement("h1");
+			title.innerHTML = yearName;
+			yearElem.appendChild(title);
+
+			for (let periodName in year) {
+				let period = year[periodName];
+
+				let periodElem = document.createElement("div");
+				periodElem.classList.add("period");
+
+				let title = document.createElement("h2");
+				title.innerHTML = periodName;
+				periodElem.appendChild(title);
+
+				if (period.length == 0) {
+					let subjectElem = document.createElement("div");
+					subjectElem.classList.add("subject");					
+					periodElem.appendChild(subjectElem);
+
+					let title = document.createElement("i");
+					title.innerHTML = "geen herkanzingen";
+					subjectElem.appendChild(title);
+				}
+
+				for (let subjectKey in period) {
+					let subject = period[subjectKey];
+
+					console.log(year, period, subject);
+					let subjectElem = document.createElement("div");
+					subjectElem.classList.add("subject");
+
+					let title = document.createElement("h3");
+					title.innerHTML = subject["title"];
+					subjectElem.appendChild(title);
+
+					let id = document.createElement("i");
+					id.innerHTML = "ID: " + subject["id"];
+					subjectElem.appendChild(id);
+
+					if (subject["part"]) {
+						let part = document.createElement("p");
+						part.innerHTML = "Part: " + subject["part"];
+						subjectElem.appendChild(part);
+					}
+
+					let ec = document.createElement("p");
+					ec.innerHTML = "EC's: " + subject["ec"];
+					subjectElem.appendChild(ec);
+					
+
+					periodElem.appendChild(subjectElem);
+				}
+
+				yearElem.appendChild(periodElem);
+			}
+
+			todoElem.appendChild(yearElem);
+		}
+	</script>
+</body>
+</html>

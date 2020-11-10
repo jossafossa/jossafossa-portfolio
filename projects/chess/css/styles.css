@@ -1,0 +1,296 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,900');
+
+:root {
+	--primary-color:#259f74;
+  --move-color:rgba(0, 255, 95, 0.2);
+  --capture-color:rgba(255, 0, 0, 0.33);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin:0;
+	padding:0;
+	font-family:"Roboto", sans-serif;
+}
+
+.move-cell {
+  box-shadow: 0 0 0 1000px var(--move-color) inset;
+}
+
+.capture-cell {
+  box-shadow: 0 0 0 1000px var(--capture-color) inset;
+}
+
+/* general */
+
+button {
+  width:100%;
+  padding:.5rem 1rem;
+  background-color:var(--primary-color);
+  font-family:"Roboto", sans-serif;
+  border:none;
+  border-radius:100px;
+  color:white;
+  font-size: 1rem;
+  cursor:pointer;
+  outline:none;
+}
+
+.container {
+  overflow:hidden;
+}
+
+
+/* menu */
+
+menu {
+	margin: 0;
+    padding: 1rem;
+    height: 100vh;
+    background-color:white;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 100;
+    width:400px;
+     max-width: 100%;
+  	transform:translateX(0);
+  	transition:.5s;
+  	box-shadow: 0 0 10px 0 rgba(0,0,0,0.2)
+}
+
+menu.collapsed {
+  transform:translateX(-100%);
+}
+
+.menu-button {
+    width: 2rem;
+    height: 2rem;
+    margin: 1rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform: translateX(200%);
+  transition:.5s;
+}
+
+.menu-button.open {  
+  transform: translateX(0%);
+}
+
+.menu-button > div, .menu-button:before, .menu-button:after {
+    content: "";
+  width:100%;
+  height:.2rem;
+  background-color:black;
+  position:absolute;
+  transform:rotate(0deg);
+  opacity:1;
+  transition:.5s;
+}
+
+.menu-button.open > div, .menu-button.open:before, .menu-button.open:after {
+  transition-delay:0s;
+}
+
+.menu-button > div {
+  transform:transLateY(-.625rem);
+}
+
+.menu-button:before {
+  
+}
+
+.menu-button:after { 
+  transform:transLateY(.625rem); 
+  
+}
+
+.menu-button.open > div {
+  
+  transform:rotate(45deg);
+}
+
+.menu-button.open:before {
+  transform:rotate(135deg);
+  opacity:0;
+}
+
+.menu-button.open:after {  
+  transform:rotate(-45deg);
+}
+
+
+
+
+
+
+
+menu h1, 
+menu h2, 
+menu h3, 
+menu h4, 
+menu h5, 
+menu h6 {
+	text-transform: uppercase;
+	text-align: center;
+	margin-top:0;
+}
+
+
+
+.menu-items li {
+  list-style-type:none;
+  display:flex;
+  justify-content:stretch;
+  margin-bottom:1rem;
+  align-items:center;
+}
+
+.menu-items > li > label {
+  flex:1 1 auto;
+}
+
+.menu-items > li > input {
+  width:200px;
+  font-family:"Roboto", sans-serif;
+  font-size:1rem;
+  padding:.5rem 1rem;
+  border-radius:100px;
+  border:1px solid lightgray;
+}
+
+
+.menu-items > li > .input-group {
+  display:flex;
+  width:200px;
+  border:1px solid lightgray;
+  border-radius:100px;
+  overflow:hidden;	
+}
+
+.menu-items > li > .input-group > input {
+  flex:1 1 auto;
+  display:block;
+  width:100%;
+  border:none;
+  outline:none;
+  text-align:center;
+  padding:0;
+  padding:.5rem 1rem;
+	background-color:white;
+     height: 100%;
+}
+
+
+
+.menu-items > li > .input-group > input[type="color"] {
+	padding:0;
+}
+
+.menu-items > li > .input-group > input[type="color"]::-webkit-color-swatch-wrapper {
+  padding:.2rem;
+}
+
+
+.menu-items > li > .input-group > input[type="color"]::-webkit-color-swatch {
+  border:none;
+  border-radius: 100px;
+  height:calc(1.2rem + .6rem);
+}
+
+
+
+
+/* chessboard */
+
+
+.board-container {
+	width:100vw;
+	height:100vh;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	background-color:whitesmoke;
+}
+
+#board {
+	height:80vmin;
+	width:80vmin;
+	background-color:white;
+	display:flex;
+	flex-wrap: wrap;
+}
+
+.cell {
+	background-size:100% 100%;
+	background-position: center;
+	transition:.3s;
+}
+
+.piece-hover {
+	background-size:120% 120%;
+}
+
+
+
+/* message board */
+
+#player-message-container {
+  width:100vw;
+  height:100vh;
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  top:0;
+  left:0;
+  pointer-events: none;
+}
+
+.player-board {
+  height:calc((100vh - 80vmin) / 2);
+  width:100vw;
+  padding:2rem;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: all;
+}
+
+@media screen and (max-width: 40rem) {
+
+  .player-board {
+    height:calc((100vh - 100vmin) / 2);
+  }
+}
+
+@media screen and (min-width: 80rem) {  
+  #player-message-container {    
+    flex-direction:row;
+  }
+
+  .player-board {
+    height:100vh;
+    width:calc((100vw - 80vmin) / 2);
+  }
+}
+
+.player-board h1 {
+  margin:0;
+  text-align: center;
+  margin-bottom:1rem;
+}
+
+.player-messages {
+  text-align: center;
+  font-size: 2rem;
+}

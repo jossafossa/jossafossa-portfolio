@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title of the document</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+            body {
+                margin:0;
+                padding:0;
+                font-family: "Montserrat", sans-serif;
+            }
+
+            * {
+                box-sizing:border-box;
+            }
+
+            .page-container {
+                width:100vw;
+                height:100vh;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:1rem;
+                background-image:url(http://www.gea-fairplay.nl/wp-content/uploads/2018/02/background.svg);
+                display: flex;
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 6rem;
+                color: white;
+                font-weight: 50;
+            }
+
+            h1 > span {
+                padding: 1rem 2rem;
+                background-image: linear-gradient(-90deg, #d41e40, #a62845);
+                color:white;
+                border-radius: 3rem;
+                font-weight: 900;
+                text-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+            }
+
+            .fairplay-logo {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                padding: 2rem;
+                width: 12%;
+            }
+
+            .logo {
+                width:100%;
+                max-width:40rem;
+                position:relative;
+                filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
+                animation: wiggle 40s infinite ease;
+            }
+
+            .logo__base {
+                width:100%;
+            }
+
+            .logo__bubbles {
+                position:absolute;
+                top:0;
+                left:0;
+                height:100%;
+                width:100%;
+            }
+
+            @keyframes wiggle {
+                0% {
+                    transform: scale(1) translate3d(0,0,0) rotate(0);
+                }
+                25% {
+                    transform: scale(1.1) translate3d(5%,-5%,0) rotate(-5deg);
+                }
+                50% {
+                    transform: scale(1) translate3d(-2%,.8%,0) rotate(12deg);
+                }
+                75% {
+                    transform: scale(1.2) translate3d(-8%,3%,0) rotate(3deg);
+                }
+                100% {
+                    transform: scale(1) translate3d(0,0,0) rotate(0);
+                }
+            }
+
+          
+            .logo__bubbles > .bubble {
+                --animation-offset:0;
+                --animation-duration:1;
+                --color:#b42644;
+                --size: 10%;
+                width:var(--size);
+                height:var(--size);
+                border-radius:50%;
+                box-shadow:0 0 0 5px var(--color) inset;
+                background-color:white;
+                position:absolute;
+                transform-origin: center center;
+                animation: bubble var(--animation-duration) infinite ease;
+                animation-delay: var(--animation-offset);
+            }
+
+            @keyframes bubble {
+                0% {
+                    transform:scale(1);
+                }
+                
+                50% {
+                    transform:scale(var(--max-scale));
+                }
+                
+                100% {
+                    transform:scale(1);
+                }
+            }
+
+
+            .logo__bubbles > .bubble:nth-child(1) {    
+                --size:9.6%;
+                left: 50.6%;
+                top: 32.5%;        
+            }
+
+            .logo__bubbles > .bubble:nth-child(2) {    
+                --size:4.6%;
+                left: 53.7%;
+                TOP: 25.8%;       
+            }
+
+            .logo__bubbles > .bubble:nth-child(3) {    
+                --size:3.3%;
+                left: 50.5%;
+                top: 29.3%;      
+            }
+
+            .logo__bubbles > .bubble:nth-child(4) {    
+                --size:4.3%;
+                left: 51.6%;
+                top: 20.8%;     
+            }
+
+            .logo__bubbles > .bubble:nth-child(5) {    
+                --size:4.1%;
+                left: 48.5%;
+                top: 41.3%;
+            }
+
+            .logo__bubbles > .bubble:nth-child(6) {    
+                --size: 3.4%;
+                left: 51.2%;
+                top: 45.7%;    
+            }
+            .logo__bubbles > .bubble:nth-child(7) {    
+                --size: 6.6%;
+                left: 44.6%;
+                top: 47%;  
+            }
+            .logo__bubbles > .bubble:nth-child(8) {    
+                --size: 7.9%;
+                left: 47.1%;
+                top: 54.9%;   
+            }
+            .logo__bubbles > .bubble:nth-child(9) {    
+                --size: 4.6%;
+                left: 42.5%;
+                top: 59.4%;    
+            }
+            .logo__bubbles > .bubble:nth-child(10) {    
+                --size: 3.6%;
+                left: 53.6%;
+                top: 42.9%;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="page-container">
+            <img src="http://www.gea-fairplay.nl/wp-content/uploads/2018/02/shaded_logo_white-1.svg" alt="" class="fairplay-logo">
+            <div class="logo">
+                <img class="logo__base" src="metamorph.png" alt="">
+
+                <div class="logo__bubbles">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+            </div>
+
+            <h1>Metamorph <span>3.0</span></h1>
+        </div>
+
+        <script>
+            let bubble = document.querySelectorAll(".bubble");
+
+            bubble.forEach(e => {
+                e.style.setProperty("--animation-offset", `${randBetween(0, 5)}s`);
+                e.style.setProperty("--animation-duration", `${randBetween(2, 3)}s`);
+
+                let size = e.getBoundingClientRect();
+                e.style.setProperty("--max-scale", (size.width * 1.60 - size.width) / size.width + 1 );
+            })
+
+            function randBetween(min, max) {
+                return Math.random()*(max-min+1)+min;
+            }
+            
+        
+        </script>
+    </body>
+
+</html> 

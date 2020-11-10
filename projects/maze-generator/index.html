@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>maze generator</title>
+	<link href="css/styles.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body>
+	<div class="container">		
+		<menu>
+			<form action="#" id="mazeForm">
+				<li><label for="width">FPS</label><input type="number" name="fps"></li>
+				<li><label for="width">Width</label><input type="number" name="width"></li>
+				<li><label for="height">Height</label><input type="number" name="height"></li>
+				<li><label for="cellSize">Cell size</label><input type="number" name="cellSize"></li>
+				<li><label for="borderWidth">Border width</label><input type="number" name="borderWidth"></li>
+				<li><label for="borderColor">Border color</label><input type="color" name="borderColor"></li>
+				<li><label for="pathColor">Path color</label><input type="color" name="pathColor"></li>
+				<li><label for="instant">Instant mode</label><input type="checkbox" name="instant"></li>
+				<li><input type="submit" value="submit"></li>
+			</form>
+		</menu>
+		<div class="canvas">			
+			<canvas id="maze"></canvas>
+		</div>
+	</div>
+	<script src="js/scripts.js"></script>
+</body>
+</html>

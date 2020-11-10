@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wheel</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="wheel-container">
+            <div class="wheel-aspect-ratio">
+                <div class="wheel-aspect-ratio-inner">
+                    <div class="wheel" id="wheel">
+                        <div class="pointer"></div>
+                    </div> 
+                </div>                
+            </div>      
+        </div>
+        <menu>
+            <div class="menu-button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="menu-container">
+                <h1 class="menu-title">Wheel settings</h1>
+                <input id="id" type="hidden">
+                <label for="listname">List name</label>
+                <input type="text" id="name">
+                <label for="value">Choices</label>
+                <div class="choices" id="value">
+                    
+                </div>
+                <label for="remove-on-spin">Remove on spin</label>
+                <input type="checkbox" id="remove-on-spin">
+                <button id="add">Submit</button>
+                <hr>
+                <label for="">Saved lists</label>
+                <table id="menu"></table>
+                <hr>
+                <button class="spin large expanded">spin this thing</button>                  
+            </div>
+        </menu>       
+        
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

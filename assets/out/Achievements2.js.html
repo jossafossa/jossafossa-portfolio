@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Achievements2.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Achievements2.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The main achievement class
+ */
+class AchievementSystem {
+
+	/**
+	 * Create a new AchievementSystem
+	 * @param  {AchievementDisplay} achievementDisplay Handles the rendering of the list of achievements
+	 * @param  {Array}              achievements       Optional initial achievements to add to the display
+	 */
+	constructor(achievementDisplay, achievements = []) {
+		this.notification = new Notification();
+		this.achievementDisplay = achievementDisplay;
+		this.achievements = achievements;
+	}
+
+	/**
+	 * Register an Achievement
+	 * @param {Achievement} achievement The Achievement
+	 */
+	register(achievement) {
+		achievement.setRoot(this);
+		this.achievements.push(achievement);
+		this.achievementDisplay.add(achievement);
+	}
+
+	/**
+	 * Get all Achievements
+	 * @return {Array.&lt;Achievement>} An array containing all registered Achievements
+	 */
+	getAll() {
+		return this.achievements;
+	}
+
+	/**
+	 * Get all achieved achievements
+	 * @return {Array.&lt;Achievement>} A list of all the achieved achievements
+	 */
+	getAchieved() {
+		return getAchievementsByState(true);
+	}
+
+	/**
+	 * Get all the unachieved achievements
+	 * @return {Array.&lt;Achievement>} A list of all the unachieved achievements
+	 */
+	getUnachieved() {
+		return getAchievementsByState(false);
+	}
+
+	/**
+	 * Get all the registered achievements with a specific state
+	 * @param  {boolean} state 				The state of the achievements
+	 * @return {Array.&lt;Achievement>}	A list of all the achievement with the specific state
+	 */
+	getAchievementsByState(state) {
+		let found = [];
+		for (let i = 0; i &lt; this.achievements.length; i++) {
+			let achievement = this.achievements[i];
+			if (achievement.getBooleanState() === state) {
+				found.push(achievement);
+			} 
+		}
+		return found;
+	}
+
+	/**
+	 * Removes the progress of all achievements
+	 */
+	resetAchievements() {
+		for (let i = this.achievements.length - 1; i >= 0; i--) {
+			this.achievements[i].discardCookie();
+		}
+	}
+
+	/**
+	 * Updates the achievement display
+	 */
+	update(achievement) {
+		this.achievementDisplay.update(achievement);
+	}
+
+}
+
+
+//------------------------------------------------------------------------------------//
+
+
+/**
+ * Takes care of the rendering of the Achievements
+ */
+class AchievementDisplay {
+
+	/**
+	 * Create a new achievement display
+	 * @param {string} element Query selector for the element where the achievements are placed in.
+	 */
+	constructor(element) {
+		this.element = element;
+		this.achievements = [];
+	}
+
+	/**
+	 * add an achievement to the display
+	 * @param {Achievement} achievement The achievement to add to the display
+	 */
+	add(achievement) {
+		this.achievements.push(achievement);
+		this.drawAll();
+	}
+
+	/**
+	 * Update an achievement which is already registered in the display
+	 * @param  {Achievement} achievement The registered achievement
+	 */
+	update(achievement) {		
+		for (let i = 0; i &lt; this.achievements.length; i++) {
+			if (this.achievements[i].slug == achievement.slug) {
+				this.achievements[i] = achievement;
+				this.drawAll();
+			}
+		}
+	}
+
+	/**
+	 * redraws all achievements
+	 */
+	drawAll() {		
+		console.log("\n\nAchievement display\n--------------------------------");	
+		for( achievement of this.achievements) {		
+			console.log(achievement.name, achievement.getProgress());
+		}
+		console.log("--------------------------------");
+	}
+}
+
+
+//------------------------------------------------------------------------------------//
+
+
+/**
+ * The simplest form of achievement
+ */
+class Achievement {
+
+	/**
+	 * create an Achievement
+	 * @param {Object} 	settings 					An object containing all the settings for the achievements
+	 * @param {string} 	settings.name 		The display name of the achievement
+	 * @param {number} 	settings.points 	The number of points the achievement is worth
+	 * @param {string} 	settings.image 		A display image for the achievement
+	 * @param {boolean} settings.achieved An optional state for the achievement (true = achieved; false = unachieved)
+	 */
+	constructor(settings) {
+		this.name = 		settings.name;
+		this.points = 	settings.points;
+		this.image = 		settings.image;
+		this.achieved = settings.achieved ? settings.achieved : false;
+		this.slug = this.getSlug(this.name);
+		this.ready = false;
+	}
+	
+	onReady = () => {};
+	onAchieved = () => {};
+	onUnachieved = () => {};
+
+	/**
+	 * Set the AchievementSystem of the achievement. Usually gets triggered by an AchievementSystem object itself when registering an achievement
+	 * @param {AchievementSystem} root The root AchievementSystem object
+	 */
+	setRoot(root) {
+		this.root = root;
+		this.activate();
+	}
+
+	/**
+	 * Activates the achievement 
+	 */
+	activate() {
+		this.ready = true;
+		this.onReady();
+	}
+
+	update() {
+		this.root.update(this);
+	}
+
+	/**
+	 * Sets the status of the achievement to achieved
+	 */
+	achieve() {
+		this.achieved = true;
+		this.onAchieved();
+		this.update();
+	}
+
+	/**
+	 * Sets the status of the achievement to unachieved
+	 */
+	unachieve() {
+		this.achieved = false;
+		this.onUnachieved();
+		this.update();
+	}
+
+	/**
+	 * Return the achievement to its orginal state
+	 */
+	reset() {
+		this.unachieve();
+		this.setCookie()
+	}
+
+	/**
+	 * Get a string that represents the state of the achievement
+	 * @return {String} The state of the achievement
+	 */
+	getProgress() {
+		return this.achieved ? "achieved" : "unachieved";
+	}
+
+	/**
+	 * Gets the state of the achievement
+	 * @return {boolean} Achievement state
+	 */
+	getState() {
+		return this.achieved;
+	}
+
+	/**
+	 * Generates a slug based on a string
+	 * @param  {string} str The input string
+	 * @return {string}     The input string without spaces and illegal characters
+	 */
+	getSlug(str) {
+	  str = str.replace(/^\s+|\s+$/g, ""); // trim
+	  str = str.toLowerCase();
+
+	  // remove accents, swap ñ for n, etc
+	  let from = "åàáãäâèéëêìíïîòóöôùúüûñç·/_,:;";
+	  let to = "aaaaaaeeeeiiiioooouuuunc------";
+
+	  for (let i = 0, l = from.length; i &lt; l; i++) {
+	    str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+	  }
+
+	  str = str
+	    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+	    .replace(/\s+/g, "-") // collapse whitespace and replace by -
+	    .replace(/-+/g, "-") // collapse dashes
+	    .replace(/^-+/, "") // trim - from start of text
+	    .replace(/-+$/, ""); // trim - from end of text
+
+	  return str;
+	}
+
+	/**
+	 * Save the progress in a cookie
+	 * @param {Object} data The progress data
+	 */	
+	setCookie(data) {
+		localStorage.setItem(this.slug, JSON.stringify(data));
+	}
+
+	/**
+	 * Get the value of the registered cookie
+	 * @return {Object} The content of the cookie
+	 */
+	getCookie() {		
+		return JSON.parse(localStorage.getItem(this.slug));
+	}
+
+	/**
+	 * Check if there is a cookie registered for this achievement
+	 * @return {Boolean} If the cookie is present
+	 */
+	hasCookie() {
+		let cookie = localStorage.getItem(this.slug);
+		if (cookie != undefined) {
+			return (key in Object.keys(cookie)) ? false : true;
+		} else {
+			return false;
+		} 	
+	}
+}
+
+
+//------------------------------------------------------------------------------------//
+
+
+/**
+ * An Achievement whit a counter and a goal to reach
+ */
+class ProgressAchievement extends Achievement {
+
+	/**
+	 * create an Achievement
+	 * @param {Object} 	settings 					An object containing all the settings for the achievements
+	 * @param {string} 	settings.name 		The display name of the achievement
+	 * @param {number} 	settings.points 	The number of points the achievement is worth
+	 * @param {string} 	settings.image 		A display image for the achievement
+	 * @param {boolean} settings.achieved An optional state for the achievement (true = achieved; false = unachieved)
+	 * @param {number} 	settings.value 		Starting value
+	 * @param {number} 	settings.target 	Target value
+	 */
+	constructor(settings) {
+		super(settings);
+		this.value = settings.value;
+		this.target = settings.target;
+	}
+
+	/**
+	 * Update the value of the achievement
+	 * @param {number} value The value
+	 */
+	setValue(value) {
+		this.value = value;
+		this.checkValue();
+	}
+
+	/**
+	 * Increment the value of the achievement by one
+	 */
+	incrementValue() {
+		this.value++;
+		this.checkValue();
+	}
+
+	/**
+	 * Check and update the state of the achievement
+	 */
+	checkValue() {
+		if (this.value >= this.target) {
+			this.achieve();
+		} else {
+			this.unachieve();
+		}
+	}
+
+	/**
+	 * @override
+	 */
+	getProgress() {
+		return this.value + " out of " + this.target + " so " + (this.achieved ? "achieved" : "unachieved");
+	}
+}
+
+
+////////////////////////////////////////////////
+// test setup
+let achievementSystem = new AchievementSystem(new AchievementDisplay());
+
+let achievement = new Achievement({
+	name: "test achievement",
+	points: 200,
+	image: "henk.png",
+})
+
+let achievement2 = new ProgressAchievement({
+	name: "test achievement2",
+	points: 300,
+	image: "henk.png",
+	value: 0,
+	target: 100,
+})
+
+achievementSystem.register(achievement);
+achievementSystem.register(achievement2);
+
+setInterval(() => achievement2.incrementValue(), 100);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Achievement.html">Achievement</a></li><li><a href="AchievementDisplay.html">AchievementDisplay</a></li><li><a href="AchievementSystem.html">AchievementSystem</a></li><li><a href="ProgressAchievement.html">ProgressAchievement</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 00:31:15 GMT+0400 (GMT+04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

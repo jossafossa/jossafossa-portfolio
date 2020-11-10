@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Minecraft</title>
+	<style>
+		body {
+			background-color:black;
+			padding:0;
+			margin:0;
+			height:100vh;
+			width:100vw;
+		}
+
+		.bg {
+			background-image: url(https://ih0.redbubble.net/image.258058537.5676/pp,550x550.u5.jpg);
+			position:absolute;
+			width:100vw;
+			height:100vh;		
+			opacity:0.5;	
+		}
+
+		.servers {	
+			z-index: 2;
+			position: relative;
+			height:100%;		
+			display:flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+		.servers > * {
+			margin-bottom:1rem;
+			width:100%;
+			max-width:100vmin;
+		}
+	</style>
+</head>
+<body>
+	<div class="bg"></div>
+	<div class="servers">
+		
+	</div>
+	<script>
+		let urlBase = "http://status.mclive.eu/";
+		let serverList = [
+			"wetfjord.eu",
+			"s.mees.io"
+		];
+		let serverListElem = document.getElementsByClassName("servers")[0];
+		serverList.forEach(server => {
+			let img = document.createElement("img");
+			img.src = urlBase + server +"/" + server + "/25565/banner.png";
+			serverListElem.appendChild(img);
+		})	
+	</script>
+</body>
+</html>
