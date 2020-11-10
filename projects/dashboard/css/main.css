@@ -1,0 +1,358 @@
+/* 
+ * https://github.com/jtrost/Complete-CSS-Reset
+*/
+/* Displays for HTML 5 */
+article, aside, audio, command, datagrid, details, dialog, embed,
+figcaption, figure, footer, header, hgroup, menu, nav, section, summary,
+video, wbr {
+  display: block; }
+
+bdi, figcaption, keygen, mark, meter, progress, rp, rt, ruby, time {
+  display: inline; }
+
+/* Deprecated tags */
+acronym, applet, big, center, dir, font, frame, frameset, noframes, s,
+strike, tt, u, xmp {
+  display: none; }
+
+/* Reset styles for all structural tags */
+a, abbr, area, article, aside, audio, b, bdo, blockquote, body, button,
+canvas, caption, cite, code, col, colgroup, command, datalist, dd, del,
+details, dialog, dfn, div, dl, dt, em, embed, fieldset, figure, form,
+h1, h2, h3, h4, h5, h6, head, header, hgroup, hr, html, i, iframe, img,
+input, ins, keygen, kbd, label, legend, li, map, mark, menu, meter, nav,
+noscript, object, ol, optgroup, option, output, p, param, pre, progress,
+q, rp, rt, ruby, samp, section, select, small, span, strong, sub, sup,
+table, tbody, td, textarea, tfoot, th, thead, time, tr, ul, var, video {
+  background: transparent;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  vertical-align: baseline;
+  z-index: 1; }
+
+/* Miscellaneous resets */
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+/* reset */
+:root {
+  --window-bg: rgba(232, 232, 232, 0.9);
+  --menu-bg: rgba(232, 232, 232, 0.3); }
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: blue;
+  font-family: "Open Sans", sans-serif;
+  overflow: hidden; }
+
+* {
+  box-sizing: border-box; }
+
+menu {
+  margin: 0;
+  padding: 0; }
+
+figure {
+  margin: 0;
+  max-width: 100%;
+  user-select: none; }
+
+figure > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none; }
+
+.rounded {
+  border-radius: 1rem; }
+
+/* general */
+.selected {
+  position: relative; }
+  .selected:after {
+    content: "";
+    position: absolute;
+    top: -.25rem;
+    left: -.25rem;
+    width: calc(100% + .5rem);
+    height: calc(100% + .5rem);
+    border-radius: .5rem;
+    background: linear-gradient(45deg, #bdbdda57, #ffffff00);
+    background-size: 2px 2px;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 0 0 0 1px #ced9e84a; }
+
+/* typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin-bottom: .5em; }
+
+h1 {
+  font-size: 2.5rem; }
+
+h2 {
+  font-size: 2.2rem; }
+
+h3 {
+  font-size: 2rem; }
+
+h4 {
+  font-size: 1.8rem; }
+
+h5 {
+  font-size: 1.5rem; }
+
+h6 {
+  font-size: 1.4rem; }
+
+.small {
+  font-size: 80%; }
+
+.light {
+  opacity: 0.5; }
+
+/* page setup */
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; }
+
+/* desktop */
+.desktop-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0; }
+
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; }
+
+/* nav */
+.main-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%; }
+  .main-nav > ul {
+    display: flex;
+    list-style-type: none;
+    padding: 1rem;
+    margin: 0;
+    border-radius: 1rem 1rem 0 0;
+    background-color: var(--menu-bg);
+    position: relative;
+    backdrop-filter: blur(10px); }
+    .main-nav > ul .nav-corner {
+      width: 1rem;
+      height: 1rem;
+      position: absolute;
+      bottom: 0;
+      overflow: hidden; }
+      .main-nav > ul .nav-corner:after {
+        content: "";
+        width: 200%;
+        height: 200%;
+        position: absolute;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2rem var(--menu-bg);
+        bottom: 0;
+        left: 0;
+        backdrop-filter: blur(10px); }
+      .main-nav > ul .nav-corner:nth-child(1) {
+        left: 0;
+        transform: translateX(-100%) scaleX(-1); }
+      .main-nav > ul .nav-corner:nth-child(2) {
+        right: 0;
+        transform: translateX(100%); }
+    .main-nav > ul > li {
+      padding: 0;
+      margin: 0; }
+      .main-nav > ul > li:not(:nth-last-child(1)) {
+        margin-right: 1rem; }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.7em;
+  position: relative;
+  user-select: none; }
+  .app.has-notification:after {
+    content: "";
+    width: .8rem;
+    height: .8rem;
+    border-radius: 50%;
+    background-color: #ee550e;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(25%, -25%);
+    z-index: 2; }
+  .app > figure {
+    margin-bottom: 0.5rem;
+    width: 5rem;
+    height: 5rem; }
+    .app > figure > img {
+      -webkit-user-drag: none; }
+  .app > span {
+    font-weight: 500;
+    opacity: 0.5; }
+
+.app-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 400px;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  visibility: hidden; }
+  .app-window.animating {
+    transition: all .4s ease; }
+  .app-window.is-visible {
+    pointer-events: all;
+    opacity: 1;
+    visibility: visible; }
+  .app-window.is-maximized > .app-window-content {
+    border-radius: 0; }
+  .app-window.is-resizing iframe, .app-window.is-dragging iframe {
+    pointer-events: none; }
+  .app-window > .app-window-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--window-bg);
+    border-radius: 1rem;
+    overflow: hidden;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: .2s ease; }
+    .app-window > .app-window-content > header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2rem;
+      background-color: var(--window-bg);
+      position: relative;
+      user-select: none;
+      cursor: move;
+      width: 100%; }
+      .app-window > .app-window-content > header menu {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center; }
+        .app-window > .app-window-content > header menu > * {
+          width: .75rem;
+          height: .75rem;
+          background-color: #646464;
+          border-radius: 50%; }
+          .app-window > .app-window-content > header menu > *:hover {
+            box-shadow: 0 0 0 100px rgba(0, 0, 0, 0.1) inset; }
+          .app-window > .app-window-content > header menu > *:not(:nth-last-child(1)) {
+            margin-right: .25rem; }
+          .app-window > .app-window-content > header menu > *.close {
+            background-color: #ff6058; }
+          .app-window > .app-window-content > header menu > *.maximize {
+            background-color: #28c940; }
+          .app-window > .app-window-content > header menu > *.minimize {
+            background-color: #febf2f; }
+      .app-window > .app-window-content > header h2 {
+        opacity: 0.8;
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin: 0; }
+    .app-window > .app-window-content > section {
+      flex: 1;
+      overflow: auto;
+      width: 100%;
+      user-select: text; }
+      .app-window > .app-window-content > section > iframe {
+        width: 100%;
+        height: 100%;
+        display: block; }
+    .app-window > .app-window-content > footer {
+      background-color: var(--window-bg);
+      height: 1.5rem;
+      width: 100%; }
+  .app-window > .move-tools {
+    pointer-events: none;
+    top: -0.5rem;
+    left: -0.5rem;
+    width: calc(100% + 1rem);
+    height: calc(100% + 1rem);
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 2; }
+    .app-window > .move-tools .handle-column {
+      width: 1rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column; }
+      .app-window > .move-tools .handle-column > * {
+        min-height: 1rem;
+        width: 100%; }
+        .app-window > .move-tools .handle-column > *:nth-child(2) {
+          flex: 1; }
+    .app-window > .move-tools .handle {
+      pointer-events: all;
+      -webkit-user-drag: none;
+      user-select: none; }
+      .app-window > .move-tools .handle.handle-top, .app-window > .move-tools .handle.handle-bottom {
+        height: 1rem;
+        position: absolute;
+        width: 100%; }
+      .app-window > .move-tools .handle.handle-top {
+        top: 0; }
+      .app-window > .move-tools .handle.handle-bottom {
+        bottom: 0; }
+      .app-window > .move-tools .handle.handle-top {
+        cursor: n-resize; }
+      .app-window > .move-tools .handle.handle-bottom {
+        cursor: s-resize; }
+      .app-window > .move-tools .handle.handle-left {
+        cursor: e-resize; }
+      .app-window > .move-tools .handle.handle-right {
+        cursor: w-resize; }
+      .app-window > .move-tools .handle.handle-top-left {
+        cursor: nw-resize; }
+      .app-window > .move-tools .handle.handle-bottom-right {
+        cursor: se-resize; }
+      .app-window > .move-tools .handle.handle-top-right {
+        cursor: ne-resize; }
+      .app-window > .move-tools .handle.handle-bottom-left {
+        cursor: sw-resize; }
