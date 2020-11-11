@@ -1,7 +1,5 @@
-
-
 class AppWindow {
-    constructor(root, title = "Window", ajaxContent, iframe = false) {
+    constructor(root, title = "Window") {
         this.root = root;
         this.title = title;
         this.position = {x: 0, y: 0};
@@ -10,9 +8,8 @@ class AppWindow {
         this.minWidth = 200;
         this.minHeight = 150;
         this.isMaximized = false;
+        this.isMinimized = true;
         this.animationSpeed = 300;
-        this.ajaxContent = ajaxContent;
-        this.iframe = iframe;
         this.order = 0;
 
         this.events = {
@@ -296,11 +293,13 @@ class AppWindow {
     close() {
         this.trigger("close", this);
         this.minimize();
+        // this.unloadContent();
     }
 
-    open(transformFrom, transformTo = this.centerPos, time = null) {
+    async open(transformFrom, transformTo = this.centerPos, time = null) {
         this.trigger("open", this);
-        if (!this.isVisible) {
+        console.log(this.isMinimized);
+        if (this.isMinimized || !this.isVisible) {
             this.isMinimized = false;
             this.app.classList.remove("is-minimized");
             this.app.style.transform = transformFrom.transform;
@@ -314,15 +313,17 @@ class AppWindow {
             this.closedPosition = transformFrom;
 
             this.animateTo(position, time);
-            setTimeout(() => {
-                this.fadeIn();
-            }, 100)
+            // this.loadContent();
 
-            this.loadContent();
+            await sleep(100);
+
+            this.fadeIn();
+
         }
     }
 
     async minimize() {
+        console.log("minimize");
         if (!this.isMinimized) {
             this.trigger("minimize", this);
             this.originalPosition = new Transform(this.position, this.width, this.height);
@@ -363,20 +364,44 @@ class AppWindow {
             this.app.classList.remove("is-maximized");
         }
     }
+}
+
+class ContentAppWindow extends AppWindow {
+    constructor(root, title = "Window", ajaxContent, iframe = false) {
+        super(root, title);
+        this.ajaxContent = ajaxContent;
+        this.iframe = iframe;
+        this.loaded = false;
+
+        this.on("open", e => {this.loadContent()});
+        this.on("close", e => {this.unloadContent()});
+    }
 
     async loadContent() {
         if (this.iframe) {
-            console.log("spul");
-            let frame = document.createElement("iframe");
-            frame.src = this.ajaxContent;
-            this.contentElement.innerHTML = "";
-            this.contentElement.appendChild(frame);
-            console.log(frame);
+            if (!this.loaded) {
+                let frame = document.createElement("iframe");
+                frame.src = this.ajaxContent;
+                this.contentElement.innerHTML = "";
+                this.contentElement.appendChild(frame);
+                this.loaded = true;
+            }
         } else {
             let content = await fetch(this.ajaxContent);
             let html = await content.text();
             this.contentElement.innerHTML = html;
         }
+    }
+
+    unloadContent() {
+        this.contentElement.innerHTML = "";
+        this.loaded = false;
+    }
+}
+
+class SettingsAppWindow extends AppWindow {
+    constructor(root, title = "Window") {
+        super(root, title);
     }
 }
 
@@ -475,8 +500,20 @@ class App {
     constructor(name, icon, url, iframe) {
         this.name = name;
         this.icon = icon;
+    }
+}
+
+class ContentApp extends App {
+    constructor(name, icon, url, iframe) {
+        super(name, icon);
         this.url = url;
         this.iframe = iframe
+    }
+}
+
+class SettingsApp extends App {
+    constructor(name, icon) {
+        super(name, icon);
     }
 }
 
@@ -492,16 +529,32 @@ class FossaOS {
 
     addApp(app) {
         this.apps.push(app);
-        let appWindow = new AppWindow(this.desktop, app.name, app.url, app.iframe);
 
-        // appWindow.on("update", e=>{console.log("update", e)});
-        appWindow.on("dragStart", appWindow => {this.bringToFront(appWindow)});
-        appWindow.on("open", appWindow => {this.bringToFront(appWindow)});
-        appWindow.on("click", appWindow => {this.bringToFront(appWindow)});
+        if (app instanceof ContentApp) {
+            this.addContentApp(app);
+        } else if (app instanceof SettingsApp) {
+            this.addSettingsApp(app);
+        }
+    }
 
-        this.menu.addItem(new MenuItem(app.name, app.icon, appWindow));
+    addContentApp(app) {
+        let appWindow = new ContentAppWindow(this.desktop, app.name, app.url, app.iframe);
+        this.setupwindow(app, appWindow);
+    }
 
-        debug("ADDED APP", app);
+    addSettingsApp(app) {
+        let appWindow = new SettingsAppWindow(this.desktop, app.name, app.url, app.iframe);
+        this.setupwindow(app, appWindow);
+    }
+
+    setupwindow(app, appWindow) {
+         // appWindow.on("update", e=>{console.log("update", e)});
+         appWindow.on("dragStart", appWindow => {this.bringToFront(appWindow)});
+         appWindow.on("open", appWindow => {this.bringToFront(appWindow)});
+         appWindow.on("click", appWindow => {this.bringToFront(appWindow)});
+ 
+         this.menu.addItem(new MenuItem(app.name, app.icon, appWindow));
+ 
     }
 
     bringToFront(appWindow) {
@@ -542,17 +595,27 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let os = new FossaOS(".desktop", ".main-nav ul");
 
-    os.addApp(new App("projects.exe", "https://cataas.com/cat", "apps/projects.html"));
-    os.addApp(new App("about.exe", "https://cataas.com/cat/gif", "apps/about.html"));
-    os.addApp(new App("contact.exe", "https://cataas.com/cat/cute", "apps/contact.html"));
-    os.addApp(new App("beauty.exe", "https://cataas.com/cat/cute", "https://b2design.nl", true));
+    os.addApp(new ContentApp("projects.exe", "https://cataas.com/cat", "apps/projects.html"));
+    os.addApp(new ContentApp("about.exe", "https://cataas.com/cat/gif", "apps/about.html"));
+    os.addApp(new ContentApp("contact.exe", "https://cataas.com/cat/cute", "apps/contact.html"));
+    os.addApp(new ContentApp("contact.exe", "https://cataas.com/cat/cute", "apps/contact.html"));
+    os.addApp(new SettingsApp("Settings.exe", "https://cataas.com/cat/cute"));
 
-    os.addApp(new App("chess_v5.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/chess_v5", true));
-    os.addApp(new App("logos.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/logos", true));
-    os.addApp(new App("design.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/design", true));
-    os.addApp(new App("draw2.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/draw2", true));
-    os.addApp(new App("faviTetris.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviTetris", true));
-    os.addApp(new App("faviSnake.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviSnake", true));
+    // os.addApp(new App("chess_v5.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/chess_v5", true));
+    // os.addApp(new App("logos.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/logos", true));
+    os.addApp(new ContentApp("design.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/design", true));
+    // os.addApp(new App("draw2.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/draw2", true));
+    // os.addApp(new App("faviTetris.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviTetris", true));
+    // os.addApp(new App("faviSnake.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviSnake", true));
 
+    /* 
+    projects:
+    - fairplay
+    - Word clock
+    - Catifier
+    - Favigames
+    - other
+    - 
+    */
 
 }, false);
