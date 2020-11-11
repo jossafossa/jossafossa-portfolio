@@ -299,8 +299,8 @@ class AppWindow {
     }
 
     open(transformFrom, transformTo = this.centerPos, time = null) {
+        this.trigger("open", this);
         if (!this.isVisible) {
-            this.trigger("open", this);
             this.isMinimized = false;
             this.app.classList.remove("is-minimized");
             this.app.style.transform = transformFrom.transform;
@@ -458,11 +458,11 @@ class MenuItem {
         // to
         let windowHeight = window.innerHeight;
         let windowWidth = window.innerWidth;
-        let toWidth = windowWidth / 2 > 400 ? windowWidth / 2 : 400;
-        let toHeight = windowHeight / 2 > 300 ? windowHeight / 2 : 300;
+        let toWidth = Math.round(windowWidth / 2 > 400 ? windowWidth / 2 : 400);
+        let toHeight = Math.round(windowHeight / 2 > 300 ? windowHeight / 2 : 300);
         let toPos = {
-            x: windowWidth / 2 - toWidth / 2,
-            y: windowHeight / 2 - toHeight / 2,
+            x: Math.round(windowWidth / 2 - toWidth / 2),
+            y: Math.round(windowHeight / 2 - toHeight / 2),
         }
 
         let translateFrom = new Transform(fromPos, fromWidth, fromHeight);
@@ -547,12 +547,12 @@ document.addEventListener('DOMContentLoaded', function(){
     os.addApp(new App("contact.exe", "https://cataas.com/cat/cute", "apps/contact.html"));
     os.addApp(new App("beauty.exe", "https://cataas.com/cat/cute", "https://b2design.nl", true));
 
-    os.addApp(new App("chess_v5.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/chess_v5", true));
-    os.addApp(new App("logos.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/logos", true));
-    os.addApp(new App("design.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/design", true));
-    os.addApp(new App("draw2.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/draw2", true));
-    os.addApp(new App("faviTetris.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/faviTetris", true));
-    os.addApp(new App("faviSnake.exe", "https://cataas.com/cat/cute", "https://jossafossa.nl/projects/faviSnake", true));
+    os.addApp(new App("chess_v5.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/chess_v5", true));
+    os.addApp(new App("logos.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/logos", true));
+    os.addApp(new App("design.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/design", true));
+    os.addApp(new App("draw2.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/draw2", true));
+    os.addApp(new App("faviTetris.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviTetris", true));
+    os.addApp(new App("faviSnake.exe", "https://cataas.com/cat/cute", "https://www.jossafossa.nl/projects/faviSnake", true));
 
 
 }, false);
