@@ -1,6 +1,15 @@
 
 
 // import { AchievementSystem, Achievement, AchievementDisplay, ElementClickTargetAchievement, ClickAllElementsAchievement, ProgressAchievement } from "./Achievements2.js";
+// import "./secretCode";
+// import "./headerAnimator";
+// import "./modeSwitcher"
+// import "./textTyper";
+// import "./toolTips";
+// import "./Achievements";
+// import "./achievementSetup";
+
+
 
 /* ACHIEVEMENTS */
 // var achievementDisplay = new AchievementDisplay(".achievements");
@@ -69,10 +78,60 @@
 
 	/* RIPPLE */
 	var ripple = new Ripple(".menu_item, p > i, .button, button");
+	new Bulge(".menu_item, p > i, .button, button, .header, .projects_item > a");
+
+	let timeout;
+	let menuItems = document.querySelectorAll(".menu_item");
+	for(let item of menuItems) {
+		item.addEventListener("click", e => {
+			let container = item.closest(".menu");
+			let containerContainer = item.closest(".menu-container");
+			containerContainer.style.transitionDuration = "0s";
+			containerContainer.style.transitionDelay = "1.9s";
+			let color = item.dataset.color;
+			document.body.style.setProperty("--primary", color);
+			let parentBox = container.getBoundingClientRect();
+			let relX, relY;
+			if (parentBox.top == 0) {
+				relX = e.clientX - container.offsetLeft;
+				relY = e.clientY - container.offsetTop;
+			} else {
+				relX = e.pageX - container.offsetLeft;
+				relY = e.pageY - container.offsetTop;
+			}
+			ripple.ripples(container, relX, relY, 1, color, true);
+			console.log(e, container.offsetTop);
+
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				containerContainer.style.transitionDelay = null;
+				containerContainer.style.transitionDuration = null;
+			}, 1500);
+		})
+	}
 
 
 	/* NAV */ 
 
+	// sticky menu
+	let menu = document.querySelector(".menu");
+	let menuContainer = document.querySelector(".menu-container");
+	let box = menuContainer.getBoundingClientRect();
+	menu.dataset.width = box.width + "px";
+
+	document.addEventListener("scroll", e => {
+		let scrollY = window.scrollY;
+		let box = menuContainer.getBoundingClientRect();
+
+		// console.log(box, scrollY);
+		if (box.y <= 0) {
+			menu.classList.add("sticky");
+			menu.style.width = menu.dataset.width;
+		} else {
+			menu.classList.remove("sticky"); 
+			menu.style.width = undefined;
+		}
+	});
 
 
 		// menu
@@ -87,7 +146,7 @@
 		}
 
 
-		for(item of items) {
+		for(let item of items) {
 			item.addEventListener("click", (e) => {
 				var elem = e.target;
 				for (var i = 0; i < pages.length; i++) {
@@ -100,7 +159,7 @@
 		}
 
 	/* MODE SWITCHER */
-	var mode_switcher = new modeSwitcher(".modeSwitcher", "lightmode", false);
+	var mode_switcher = new modeSwitcher("#darkModeSwitch", "lightmode", false);
 	var toolTips = new toolTipController("tooltip");
 
 

@@ -1,122 +1,75 @@
-//----------------------------------------------------------------------------------------------------
-// Gulp Sass & JavaScript Compiler
-// https://github.com/jamiewade/gulp-sass-js
-//----------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------
-// Environment variables
-//--------------------------------------------------
-
-var env = require('./env.json');
+const gulp = require("gulp");
+const env = require('./env.json');
     destination = env.destination,
     cssFileName = env.generatedCssFileName,
     jsIncludeFile = env.jsIncludeFile,
+    jsBaseFile = env.jsBaseFile,
     jsFileName = env.generatedJsFileName,
     jsFolder = env.jsFolder,
     productionMode = env.productionMode,
     sassIncludeFile = env.sassIncludeFile,
+    sassBaseFile = env.sassBaseFile,
     sassFolder = env.sassFolder;
+    base = env.base;
+const { parallel, series } = require("gulp");
+
+const imagemin = require("gulp-imagemin");
+const htmlmin = require("gulp-htmlmin");
+const uglify = require("gulp-uglify");
+const sass = require("gulp-sass");
+const concat = require("gulp-concat");
+const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
+const autoprefixer = require('gulp-autoprefixer');
+const babel = require('gulp-babel');
+
+// /*
+// TOP LEVEL FUNCTIONS
+//     gulp.task = Define tasks
+//     gulp.src = Point to files to use
+//     gulp.dest = Points to the folder to output
+//     gulp.watch = Watch files and folders for changes
+// */
 
 
-//--------------------------------------------------
-// Dependencies
-//--------------------------------------------------
 
-var gulp = require('gulp'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cleanCSS = require('gulp-clean-css'),
-    color = require('gulp-color'),
-    concat = require('gulp-concat'),
-    gulpif = require('gulp-if'),
-    include = require('gulp-include'),
-    sass = require('gulp-sass'),
-    minify = require('gulp-minify'),
-    // uglify = require('gulp-uglify');
-    stripDebug = require('gulp-strip-debug');
+// Scripts
+function js(cb) {
+    gulp.src(jsBaseFile)
+        .pipe(babel({
+            presets: ['@babel/preset-env']
+        }))
+        .pipe(concat("main.js"))
+        .pipe(uglify())
+        .pipe(gulp.dest(destination));
+    cb();
+}
 
-var argv = require('yargs').argv;
-var isProduction = (argv.production === undefined) ? false : true;
-
-// Only run the tasks if a destination folder has been defined
-if (destination) {
-
-    //--------------------------------------------------
-    // Sass
-    //--------------------------------------------------
-
-    gulp.task('styles', function() {
-        if (sassIncludeFile) {
-            gulp.src(sassIncludeFile)
-                .pipe(sass().on('error', sass.logError))
-                .pipe(gulpif(productionMode == true, cleanCSS({compatibility: 'ie8'})))
-                .pipe(autoprefixer())
-                .pipe(concat(cssFileName + '.css'))
-                .pipe(gulp.dest(destination));
-        } else {
-            console.log(color('You need to specify which folder contains your Sass files. Check env.example.json for an example.', 'RED'));
-            process.exit();
-        }
-    });
-
-
-    //--------------------------------------------------
-    // JavaScript
-    //--------------------------------------------------
-
-    gulp.task('scripts', function() {
-        if (jsFolder) {
-            gulp.src([
-                '../js/Notification.js',
-                '../js/bouncer.js',
-                '../js/dirAnimate.js',
-                '../js/HeaderAnimator.js',
-                '../js/modeSwitcher.js',
-                '../js/ripple.js',
-                '../js/secretCode.js',
-                '../js/textTyper.js',
-                '../js/toolTips.js',
-                '../js/Achievements.js',
-                '../js/AchievementSetup.js',
-                '../js/main.js'
-                ])
-                .pipe(include())
-                .pipe(gulpif(isProduction, stripDebug()))
-                .pipe(minify({noSource: true}))
-                .pipe(concat(jsFileName + '.js'))
-                // .pipe(gulpif(productionMode == true, uglify({ mangle: false })))
-                // .on("error", function (err) { console.log(err) })
-                .pipe(gulp.dest(destination))
-        } else {
-            console.log(color('You need to specify which folder contains your JavaScript files. Check env.example.json for an example.', 'RED'));
-            process.exit();
-        }
-    });
-
-} else {
-    console.log(color('You need to specify the destination folder for your generated files. Check env.example.json for an example.', 'RED'));
-    process.exit();
+// Compile Sass
+function css(cb) {
+    gulp.src(sassBaseFile)
+        .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
+        .pipe(autoprefixer({
+            browserlist: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe(gulp.dest(destination))
+        // Stream changes to all browsers
+        .pipe(browserSync.stream());
+    cb();
 }
 
 
-//--------------------------------------------------
-// Watch
-//--------------------------------------------------
+// Watch Files
+function watch_files() {
+    browserSync.init({
+      proxy: "www.jossafossa.test"
+    });
+    gulp.watch(sassIncludeFile, css);
+    gulp.watch(jsIncludeFile, js).on("change", browserSync.reload);
+}
 
-gulp.task('watch', function () {
-    gulp.watch(sassFolder + '/**/*.scss', ['styles']);
-    gulp.watch(jsFolder + '/**/*.js', ['scripts']);
-});
+// Default 'gulp' command with start local server and watch files for changes.
+exports.default = series(css, js, watch_files);
 
-
-//------------------------------------------------------------------------------------------------------
-// gulp
-//------------------------------------------------------------------------------------------------------
-
-gulp.task('default',['styles', 'scripts', 'watch']);
-
-
-//------------------------------------------------------------------------------------------------------
-// gulp refresh
-//------------------------------------------------------------------------------------------------------
-
-gulp.task('refresh',['styles', 'scripts']);
+// 'gulp build' will build all assets but not run on a local server.
+exports.build = parallel(css, js);

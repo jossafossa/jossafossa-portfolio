@@ -1,9 +1,21 @@
 <?php 
 
 $menu = array(
-		'<i class="fas fa-project-diagram"></i> Projects' 	=> "projects", 
-		'<i class="fas fa-user"></i> About'	=> "about",
-		'<i class="fas fa-trophy marked"></i> Achievements'	=> "achievements",
+		array(
+			"title" => '<i class="fas fa-project-diagram"></i> Projects',
+		 	"slug" => "projects", 
+			"color" => "#ec624b",
+		),
+		array(
+			"title" => '<i class="fas fa-user"></i> About',
+		 	"slug" => "about", 
+			"color" => "#3369b3",
+		),
+		array(
+			"title" => '<i class="fas fa-trophy marked"></i> Achievements',
+		 	"slug" => "achievements", 
+			"color" => "#32ad56",
+		),
 );
 
 $spotidash = new Project(

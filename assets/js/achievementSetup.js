@@ -1,3 +1,5 @@
+// import SecretCode from "./secretCode";
+
 var achievementSystem = new AchievementSystem(new AchievementDisplay(".achievements"));
 
 // HACK THIS ACHIEVEMENT
@@ -206,7 +208,7 @@ var scrollElem = document.querySelectorAll(".content, body");
 
 let scrollIndex = 0;
 
-for (elem of scrollElem) {
+for (let elem of scrollElem) {
 	console.log(elem);	
 	elem.addEventListener("scroll", e => {scroll(e)}, {passive: true});
 }
@@ -248,6 +250,32 @@ achievementSystem.register(
 	})
 )
 
+// CLICK ALL MARKED ELEMENTS ON ABOUT
+	let bugAchievement = new Achievement({
+		name: "Find a bug",
+		points: 200,
+		image: "assets/img/icons/compressed/mouse.svg",
+	})
+	let bug = document.querySelector(".easter-egg");
+	if (bug) {
+		bug.addEventListener("click", () => bugAchievement.achieve());
+	} else {
+		bugAchievement.achieve();
+	}
+	achievementSystem.register(bugAchievement);
+
+
+// Achieve all achievements
+let allAchievement = new Achievement({
+	name: "Achieve all achievements",
+	points: 200,
+	image: "assets/img/icons/compressed/mouse.svg",
+})
+achievementSystem.register(allAchievement);
+
 achievementSystem.onUpdate = e => {
-	console.log("wOW ACVHIEVEMENTS UPDATEDED", e);
+	console.log(achievementSystem.getAchieved().length, achievementSystem.achievements.length)
+	if (achievementSystem.getAchieved().length >= achievementSystem.achievements.length -1) {
+		allAchievement.achieve();
+	}
 };

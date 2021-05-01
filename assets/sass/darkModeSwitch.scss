@@ -1,0 +1,332 @@
+@function randomBetween($min, $max) {
+  $rand: random();
+  $randomNum: $min + $rand * (($max - $min));
+
+  @return $randomNum;
+}
+
+.darkmode-switch {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+
+  + label {
+    --width: 4rem;
+    --height: 2rem;
+    --padding: 0.2rem;
+    --foreground: #d3e3ea;
+    --background: #1f3d80;
+    --border-size: 1rem;
+    --border-color: rgba(120, 120, 120, 0.4);
+    --transition-time: 0.75s;
+    --transition-time-slow: 1s;
+    --transition-delay: 0.12.5s;
+    --transition: var(--transition-time) ease;
+    --transition-slow: var(--transition-time-slow) ease;
+    background-color: var(--background);
+    width: var(--width);
+    height: var(--height);
+    border-radius: var(--height);
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    position: relative;
+    transition: var(--transition);
+    cursor: pointer;
+    overflow: hidden;
+
+    // optional border
+    // width:calc(var(--width) + var(--border-size) * 2);
+    // height: calc(var(--height) + var(--border-size) * 2);
+    // box-shadow:0 0 var(--border-size) rgba(0,0,0,0.2);
+    // border:var(--border-size) solid var(--border-color);
+
+    &:after {
+      --shadow-size: calc(var(--padding) / 2);
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.5) inset;
+      border-radius: var(--height);
+      z-index: 3;
+    }
+
+    // stars
+    > .stars {
+      opacity: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      transition: var(--transition);
+
+      > * {
+        --rotation: 0deg;
+        --scale: 1;
+        --time: 1s;
+        --delay: 0s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        transform: rotate(var(--rotation)) scale(var(--scale));
+
+        &:before,
+        &:after {
+          --size: calc(var(--height) / 20);
+          content: "";
+          width: var(--size);
+          height: var(--size);
+          background-color: white;
+          display: block;
+          border-radius: 50%;
+          opacity: 0.1;
+          animation: var(--time) blink infinite;
+          animation-delay: var(--delay);
+        }
+
+        @keyframes blink {
+          0% {
+            transform: scale(0.5);
+            opacity: 0.1;
+          }
+          50% {
+            transform: scale(1);
+            opacity: 0.5;
+          }
+          100% {
+            opacity: 0.1;
+            transform: scale(0.5);
+          }
+        }
+
+        $amount: 7;
+        @for $i from 1 through $amount {
+          &:nth-child(#{$amount}n + #{$i}) {
+            --rotation: #{random(360) + deg};
+            --scale: #{randomBetween(0.5, 1.5)};
+            --time: #{randomBetween(3, 8) + s};
+            --delay: #{randomBetween(0, 4) + s};
+            height: #{randomBetween(50, 150) * 1%};
+          }
+        }
+      }
+    }
+
+    // clouds
+    .clouds {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      opacity: 0;
+      transition: var(--transition);
+      > * {
+        --time: 2s;
+        --delay: 0s;
+        --offset: 0;
+        --scale: 1;
+        --opacity: 0.5;
+        animation: var(--time) clouds linear infinite;
+        animation-delay: var(--delay);
+        position: absolute;
+        width: 50%;
+        height: 15%;
+        background-color: white;
+        border-radius: 50% 50% 0 0/100% 100% 0 0;
+        top: var(--offset);
+        left: -100%;
+        opacity: var(--opacity);
+        transform: scale(var(--scale));
+
+        @keyframes clouds {
+          from {
+            left: -50%;
+          }
+          to {
+            left: 150%;
+          }
+        }
+
+        $amount: 7;
+        @for $i from 1 through $amount {
+          &:nth-child(#{$amount}n + #{$i}) {
+            --time: #{randomBetween(5, 32) + s};
+            --delay: #{randomBetween(0, 8) + s};
+            --offset: #{randomBetween(0, 100) * 1%};
+            --scale: #{randomBetween(0.5, 1)};
+            --opacity: #{randomBetween(0.2, 0.7)};
+          }
+        }
+
+        &:before,
+        &:after {
+          content: "";
+          height: 150%;
+          display: block;
+          width: 50%;
+          position: absolute;
+          background-color: white;
+          bottom: 0%;
+          left: 17%;
+          border-radius: 50%;
+        }
+
+        &:after {
+          left: auto;
+          right: 15%;
+          width: 30%;
+          height: 100%;
+          top: -15%;
+        }
+      }
+    }
+
+    > .dot {
+      --size: calc(var(--height) - (var(--padding) * 2));
+      width: var(--size);
+      height: var(--size);
+      position: absolute;
+      left: var(--padding);
+      border-radius: 50%;
+      transform: translateX(0);
+      transition: var(--transition);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      // moon / sun
+      > .circle {
+        background-color: var(--foreground);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transform: scale(0.99);
+        transition: var(--transition);
+      }
+
+      // the dark side of the moon
+      > .moon-dot {
+        position: absolute;
+        right: 0%;
+        width: 80%;
+        height: 80%;
+        background-color: var(--background);
+        border-radius: 50%;
+        margin: auto;
+        transform: translateX(30%) scale(1);
+        transition: var(--transition);
+      }
+
+      // rays
+      > .sun-rays {
+        --scale: 0.8;
+        --rotation: 0deg;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: scale(var(--scale)) rotate(var(--rotation));
+        transition: var(--transition);
+        z-index: -1;
+
+        > * {
+          width: 100%;
+          position: absolute;
+          height: 7%;
+          --scale: 0;
+          transition: var(--transition);
+          opacity: 0.8;
+
+          $amount: 4;
+          @for $i from 1 to $amount + 1 {
+            &:nth-child(#{$amount}n + #{$i}) {
+              transform: scale(var(--scale)) rotate(180deg / $amount * $i);
+            }
+          }
+
+          display: flex;
+          justify-content: space-between;
+
+          &:after,
+          &:before {
+            content: "";
+            width: 20%;
+            height: 100%;
+            background-color: var(--foreground);
+            border-radius: var(--height);
+          }
+        }
+      }
+    }
+  }
+
+  //   sun
+
+  &:hover + label {
+    --background: #395cab;
+    --foreground: #f1e8ac;
+
+    > .dot {
+      // transform:translateX(var(--padding));
+
+      > .moon-dot {
+        // transform:translateX(50%) scale(.8);
+      }
+    }
+  }
+  &:checked {
+    + label {
+      --foreground: #ffda24;
+      --background: #71b1f2;
+      > .dot {
+        transform: translateX(
+          calc(var(--width) - var(--size) - (var(--padding) * 2))
+        );
+
+        > .circle {
+          transform: scale(0.5);
+        }
+
+        > .moon-dot {
+          transform: translateX(100%) scale(0);
+        }
+
+        > .sun-rays {
+          --scale: 1;
+          --rotation: -180deg;
+          transition: var(--transition-time-slow);
+          // transition-delay: var(--transition-delay);
+
+          > * {
+            --scale: 1;
+          }
+        }
+      }
+
+      > .stars {
+        opacity: 0;
+      }
+
+      > .clouds {
+        opacity: 1;
+      }
+    }
+  }
+}

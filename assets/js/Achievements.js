@@ -39,7 +39,7 @@ class AchievementSystem {
 	 * @return {Array.<Achievement>} A list of all the achieved achievements
 	 */
 	getAchieved() {
-		return getAchievementsByState(true);
+		return this.getAchievementsByState(true);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class AchievementSystem {
 	 * @return {Array.<Achievement>} A list of all the unachieved achievements
 	 */
 	getUnachieved() {
-		return getAchievementsByState(false);
+		return this.getAchievementsByState(false);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class AchievementSystem {
 		let found = [];
 		for (let i = 0; i < this.achievements.length; i++) {
 			let achievement = this.achievements[i];
-			if (achievement.getBooleanState() === state) {
+			if (achievement.achieved === state) {
 				found.push(achievement);
 			} 
 		}
@@ -144,6 +144,7 @@ class AchievementDisplay {
 		achievement.rowElement.appendChild(image);
 
 		let title = document.createElement("div");
+		title.classList.add("achievement-title");
 		title.innerHTML = achievement.name;
 		achievement.rowElement.appendChild(title);
 
@@ -152,9 +153,9 @@ class AchievementDisplay {
 		progress.innerHTML = achievement.getProgress();
 		achievement.rowElement.appendChild(progress);
 
-		let points = document.createElement("div");
-		points.innerHTML = achievement.points;
-		achievement.rowElement.appendChild(points);
+		// let points = document.createElement("div");
+		// points.innerHTML = achievement.points;
+		// achievement.rowElement.appendChild(points);
 	}
 
 	updateState(achievement) {		
@@ -218,6 +219,7 @@ class Achievement {
 			this.onAchieved();
 		}
 	}
+
 
 	addEventListener(type, callback) {
 		switch (type) {

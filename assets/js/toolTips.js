@@ -33,17 +33,19 @@ class toolTipController {
         console.log(width, height);
 
         var x, y, dir;
+        let scrollY = window.scrollY;
+        console.log(boundingBox);
         if (boundingBox.left - toolTip.clientWidth / 2 < 0) {  
             x = boundingBox.right;
-            y = boundingBox.top + height / 2;
+            y = boundingBox.top + scrollY + height / 2;
             dir = "right";
         } else if (boundingBox.right - toolTip.clientWidth / 2 > document.body.clientWidth) {
             x = boundingBox.left;
-            y = boundingBox.top + height / 2;
+            y = boundingBox.top + scrollY + height / 2;
             dir = "left";
         } else {
             x = boundingBox.left + width / 2;
-            y = boundingBox.top;
+            y = boundingBox.top + scrollY;
             dir = "top";
         }
 

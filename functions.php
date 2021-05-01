@@ -3,12 +3,15 @@
 
 	function the_menu($menu) {
 		$current_page = $_SERVER['REQUEST_URI'];
-		foreach ($menu as $label => $url) {
+		foreach ($menu as $item) {
 			$extraClass = "";
-			if ($url == $_SERVER['REQUEST_URI']) {
+			if ($item["slug"] == $_SERVER['REQUEST_URI']) {
 				$extraClass = "active";
 			}
-			echo "<span class='menu_item ripple $extraClass' page='$url'>$label</span>"; 
+			$color = $item["color"];
+			$slug = $item["slug"];
+			$title = $item["title"];
+			echo "<span class='menu_item $extraClass' data-color='$color' page='$slug'>$title</span>"; 
 		}
 	}
 
