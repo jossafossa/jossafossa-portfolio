@@ -58,27 +58,33 @@
 
 	headerBackgrounds.loadRandomHeader();
 
-	setInterval(function() {headerBackgrounds.loadRandomHeader()}, 10000);
+	let headerBackgroundsLoop = setInterval(function() {headerBackgrounds.loadRandomHeader()}, 10000);
 
 	spaceAchievement.addEventListener("achieved", function() {
 		headerBackgrounds.chaos()
 	} );
+
 
 	var aboutPhotos = [
 		"JoostHobma.jpg",
 		"JoostHobma2.jpg",
 		"JoostHobma3.jpg"
 	];
-	var aboutPhoto = new ImageAnimator(".about_photo", aboutPhotos, "assets/img/");
+	console.log(allAboutPhotos);
+	if (allAboutPhotos !== undefined) {
+		aboutPhotos = allAboutPhotos;
+	} 
+		
+	var aboutPhoto = new ImageAnimator(".about_photo", aboutPhotos, "./assets/img/ik/");
 
 	aboutPhoto.loadRandomHeader();
 
-	setInterval(function() {aboutPhoto.loadRandomHeader()}, 10000);
+	let aboutPhotoLoop = setInterval(function() {aboutPhoto.loadRandomHeader()}, 10000);
 
 
 	/* RIPPLE */
 	var ripple = new Ripple(".menu_item, p > i, .button, button");
-	new Bulge(".menu_item, p > i, .button, button, .header, .projects_item > a");
+	new Bulge(".menu_item, p > i, .button, button, .header, .projects_item > header");
 
 	let timeout;
 	let menuItems = document.querySelectorAll(".menu_item");
@@ -119,7 +125,9 @@
 	let box = menuContainer.getBoundingClientRect();
 	menu.dataset.width = box.width + "px";
 
-	document.addEventListener("scroll", e => {
+	document.addEventListener("scroll", stick);
+	stick();
+	function stick (){
 		let scrollY = window.scrollY;
 		let box = menuContainer.getBoundingClientRect();
 
@@ -131,7 +139,7 @@
 			menu.classList.remove("sticky"); 
 			menu.style.width = undefined;
 		}
-	});
+	}
 
 
 		// menu
@@ -169,33 +177,31 @@
 		/* Welcome to my portfolio */
 		"Welcome people of this world",
 		"This is my portfolio",
-		"This is the place to find all of my accomplishments",
+		"This is the place to find most of my (personal) accomplishments",
 		"This website is made by me and uses no libraries",
-		"All that you see on this page is all mine",
-		"I did this on purpose to test my skills and learn vanilla JavaScript",
 		"Even this type text thingy is made by me",
-		"btw, it determines the time interval between letters depending on the distance between the keys on the keyboard :P",
-		"A bit over complicated, I know. But I had fun creating it",
-		"I also built in an achievements. Try for example typing in the konami code (↑ ↑ ↓ ↓ ← → ← → B A)",
-		"Or clicking the header 50 times...",
-		"Okay, enough about this site. Something about me...",
-		"I have four 4 years of experience in web development and design",
-		"I started with web development and design during my media study",
-		"During that time I learnt the basics and also started to fool around at home with stuff.",
-		"One of the first things I made was a drawing app. Check it out down below ↓↓↓↓",
-		"I also started working with Wordpress during this period. Mainly during my internship.",
-		"during my internship I made several custom WordPress templates from scratch.",
-		"That was also my full-time job after my study for about a year",
-		"Then I started my new study HBO-ICT in Groningen at Hanze",
-		"While I still focused on web development, I also discovered a lot of other aspects of development",
-		"such as: Learning new programming languages, learning about coding practices & getting to know several design patterns",
-		"A few small projects I'm quite proud of are my Favi\<Insert game name here\> games, which are playable in the favicon :P",
-		"I think It's quite a neat but useless idea",
-		"The thing I'm probably most proud of is my Spotify background.",
-		"It shows, the current playing song on Spotify. I use a program to use it as my desktop background. I use it every day",
-		"Another thing is gea-fairplay.nl. This was my first wordpress website I created outside of school.",
-		"My focus when making this website was to make it as user friendly and easy to manage in the back-end as I could",
-		"This is all I wanted to say...",
+		"Try clicking the header 50 times...",
+		"Try typing the konami code... (↑ ↑ ↓ ↓ ← → ← → B A)",
+		"Usefull isn't it! (more under Achievements :P)",
+		"I started working on small projects at home during my study (Media studies).",
+		"Thats what most of the projects on my portfolio are.",
+		"During my study I came across WordPress.",
+		"Didn't like WordPress at first, but when I learnt how to use it without thems that all changed.",
+		"Now I have worked with WordPress for 6+ years",
+		"And made 18+ custom WordPress sites already.",
+		"After my first study I started studying IT",
+		"While I still focused on web development, I also discovered a lot of other languages and methods",
+		"Now a few projects I'm proud of:",
+		"Favisnake, FaviBomber & FaviTetris!",
+		"I came across a small game made for the Favicon and got inspired",
+		"Then I decided to make my own!",
+		"the personal project that I'm most proud of is Spotidash",
+		"This website shows me the song I'm currently playing on spotify and has some media controls",
+		"I use Wallpaper Engine to use it as desktop background",
+		"There are also some WordPress websites on here:",
+		"gea-fairplay.nl, the-big-five.nl and themainevent.nl. Sadly thebigfive and themainevent are offline :(.",
+		"But I had fun creating them tho",
+		"This is all the rambling I wanted to do",
 		"Thanks for listening to my ted talk",
 		"Bye :waving:",
 		"...",
@@ -242,3 +248,16 @@
 
 	new Dir(".projects_item", ".projects_item_summary");
 
+
+
+	allAchievement.addEventListener("achieved", function() {
+		document.body.classList.add("party-mode");
+		clearInterval(headerBackgroundsLoop);
+		clearInterval(aboutPhotoLoop);
+		setInterval(e => {
+			headerBackgrounds.loadRandomHeader();
+			aboutPhoto.loadRandomHeader();
+		}, 1000);
+		var audio = new Audio('assets/mp3/victory.mp3');
+		audio.play();
+	} );

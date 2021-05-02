@@ -5,6 +5,10 @@
 		<div class="flex-container flex-center flex-margin-l">
 			<div class="column">
 				<div class="about_photo"></div>
+				<?php $images = get_images("./assets/img/ik/"); ?>
+				<script>
+					let allAboutPhotos = ['<?= join("','", $images); ?>'];
+				</script>
 			</div>
 			<div class="column stretch">
 				<p>Hi, my name is Joost Hobma. I studied MBO media at Friesland College and now I'm studying <i>HBO-ICT</i> @ Hanze Groningen. In my free time I occasionally like to build simple <i>JavaScript</i> projects. All of which you can check out at my <a href="#" page="projects">project page</a>. This website is also custom built from the ground up. When making this website I promised myself not to use any libraries or scripts, so everything you see here is built by me :). 

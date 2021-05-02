@@ -83,139 +83,144 @@ spaceAchievement.onAchieved = function() {
 
 
 // HEADER CLICKER
-achievementSystem.register(
-	new ElementClickTargetAchievement({
-		name: "click the header 1000 times",
-		notification: true,
-		points: 1000,
-		image: "assets/img/icons/compressed/pray.svg",
-		value: 0,
-		target: 1000,
-		element: ".header",
-	})
-)
-achievementSystem.register(
-	new ElementClickTargetAchievement({
-		name: "click the header 400 times",
-		notification: true,
-		points: 400,
-		image: "assets/img/icons/compressed/hands.svg",
-		value: 0,
-		target: 400,
-		element: ".header",
-	})
-)
-achievementSystem.register(
-	new ElementClickTargetAchievement({
-		name: "click the header 200 times",
-		notification: true,
-		points: 200,
-		image: "assets/img/icons/compressed/brotherhood.svg",
-		value: 0,
-		target: 200,
-		element: ".header",
-	})
-)
-achievementSystem.register(
-	new ElementClickTargetAchievement({
-		name: "click the header 100 times",
-		notification: true,
-		points: 100,
-		image: "assets/img/icons/compressed/win.svg",
-		value: 0,
-		target: 100,
-		element: ".header",
-	})
-)
-achievementSystem.register(
-	new ElementClickTargetAchievement({
-		name: "click the header 50 times",
-		notification: true,
-		points: 50,
-		image: "assets/img/icons/compressed/touch.svg",
-		value: 0,
-		target: 50,
-		element: ".header",
-	})
-)
+let header1000 = new ElementClickTargetAchievement({
+	name: "click the header 1000 times",
+	notification: false,
+	points: 1000,
+	image: "assets/img/icons/compressed/pray.svg",
+	value: 0,
+	target: 1000,
+	element: ".header",
+})
+achievementSystem.register(header1000);
 
+let header400 = new ElementClickTargetAchievement({
+	name: "click the header 400 times",
+	notification: false,
+	points: 400,
+	image: "assets/img/icons/compressed/hands.svg",
+	value: 0,
+	target: 400,
+	element: ".header",
+})
+achievementSystem.register(header400);
+
+let header200 = new ElementClickTargetAchievement({
+	name: "click the header 200 times",
+	notification: false,
+	points: 200,
+	image: "assets/img/icons/compressed/brotherhood.svg",
+	value: 0,
+	target: 200,
+	element: ".header",
+});
+achievementSystem.register(header200);
+let header100 = new ElementClickTargetAchievement({
+	name: "click the header 100 times",
+	notification: false,
+	points: 100,
+	image: "assets/img/icons/compressed/win.svg",
+	value: 0,
+	target: 100,
+	element: ".header",
+})
+achievementSystem.register(header100);
+let header50 = new ElementClickTargetAchievement({
+	name: "click the header 50 times",
+	notification: true,
+	points: 50,
+	image: "assets/img/icons/compressed/touch.svg",
+	value: 0,
+	target: 50,
+	element: ".header",
+});
+achievementSystem.register(header50);
+
+header50.addEventListener("achieved", () => {header100.notification = true});
+header100.addEventListener("achieved", () => {header200.notification = true});
+header200.addEventListener("achieved", () => {header400.notification = true});
+header400.addEventListener("achieved", () => {header1000.notification = true});
 
 
 
 
 // SCROLL ACHIEVEMENTS
-var scrollAchievements = [];
-scrollAchievements.push(
-	new ProgressAchievement({
-		name: "The Scrollmaster",
-		description: "Scroll 2 km",
-		notification: false,
-		points: 1000,
-		image: "assets/img/icons/compressed/rocket.svg",
-		value: 0,
-		target: 1000,
-	})
-)
-scrollAchievements.push(
-	new ProgressAchievement({
-		name:"Scroll Wizard",
-		description: "Scroll 800 m",
-		notification: false,
-		points: 400,
-		image: "assets/img/icons/compressed/airplane.svg",
-		value: 0,
-		target: 400,
-	})
-)
-scrollAchievements.push(
-	new ProgressAchievement({
-		name:"Active Scroller",
-		description: "Scroll 400m",
-		notification: false,
-		points: 200,
-		image: "assets/img/icons/compressed/cab.svg",
-		value: 0,
-		target: 200,
-	})
-)
-scrollAchievements.push(
-	new ProgressAchievement({
-		name: "Casual Scroller",
-		description: "Scroll 200 m",
-		notification: false,
-		points: 100,
-		image: "assets/img/icons/compressed/bicycle.svg",
-		value: 0,
-		target: 100,
-	})
-)
+let scrollAchievements = [];
 
-scrollAchievements.push(
-	new ProgressAchievement({
-		name: "Wannabe Scroller",
-		description: "Scroll 100 m",
-		notification: false,
-		points: 50,
-		image: "assets/img/icons/compressed/roller.svg",
-		value: 0,
-		target: 50,
-	})
-)
-for (let achievement of scrollAchievements) {
+let scroll5 = new ProgressAchievement({
+	name: "The Scrollmaster",
+	description: "Scroll 200 m",
+	notification: false,
+	points: 1000,
+	image: "assets/img/icons/compressed/rocket.svg",
+	value: 0,
+	target: 200,
+})
+scrollAchievements.push(scroll5);
+let scroll4 = new ProgressAchievement({
+	name:"Scroll Wizard",
+	description: "Scroll 80 m",
+	notification: false,
+	points: 400,
+	image: "assets/img/icons/compressed/airplane.svg",
+	value: 0,
+	target: 80,
+})
+scrollAchievements.push(scroll4)
+let scroll3 = new ProgressAchievement({
+	name:"Active Scroller",
+	description: "Scroll 40m",
+	notification: false,
+	points: 200,
+	image: "assets/img/icons/compressed/cab.svg",
+	value: 0,
+	target: 40,
+})
+scrollAchievements.push(scroll3)
+let scroll2 = new ProgressAchievement({
+	name: "Casual Scroller",
+	description: "Scroll 20 m",
+	notification: false,
+	points: 100,
+	image: "assets/img/icons/compressed/bicycle.svg",
+	value: 0,
+	target: 20,
+})
+scrollAchievements.push(scroll2)
+
+
+let scroll1 = new ProgressAchievement({
+	name: "Wannabe Scroller",
+	description: "Scroll 10 m",
+	notification: true,
+	points: 50,
+	image: "assets/img/icons/compressed/roller.svg",
+	value: 0,
+	target: 10,
+})
+scrollAchievements.push(scroll1);
+
+for(let achievement of scrollAchievements) {
 	achievementSystem.register(achievement);
 }
-var scrollElem = document.querySelectorAll(".content, body");
+
+scroll4.addEventListener("achieved", () => scroll5.notification = true);
+scroll3.addEventListener("achieved", () => scroll4.notification = true);
+scroll2.addEventListener("achieved", () => scroll3.notification = true);
+scroll1.addEventListener("achieved", () => scroll2.notification = true);
+
 
 let scrollIndex = 0;
-
-for (let elem of scrollElem) {
-	console.log(elem);	
-	elem.addEventListener("scroll", e => {scroll(e)}, {passive: true});
-}
+let prevScroll = 0;
+window.addEventListener("scroll", e => scroll(e));
 
 function scroll(e) {
-	scrollIndex++;
-	if (scrollIndex % 10 === 0) {
+	let amount = Math.abs(prevScroll - window.scrollY);
+	scrollIndex += amount;
+	prevScroll = window.scrollY;
+	console.log(scrollIndex);
+	if (scrollIndex > 3000) {
+		scrollIndex = 0;
 		for (let achievement of scrollAchievements) {
 			achievement.incrementValue();
 		}			
@@ -274,7 +279,6 @@ let allAchievement = new Achievement({
 achievementSystem.register(allAchievement);
 
 achievementSystem.onUpdate = e => {
-	console.log(achievementSystem.getAchieved().length, achievementSystem.achievements.length)
 	if (achievementSystem.getAchieved().length >= achievementSystem.achievements.length -1) {
 		allAchievement.achieve();
 	}

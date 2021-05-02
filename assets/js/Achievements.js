@@ -10,7 +10,6 @@ class AchievementSystem {
 	 */
 	constructor(achievementDisplay, achievements = []) {
 		this.notification = new Notification();
-		this.achievementNotification = new Notification();
 		this.achievementDisplay = achievementDisplay;
 		this.achievements = achievements; 
 		this.onUpdate = function(){};
@@ -95,7 +94,7 @@ class AchievementSystem {
 
 
 	praise(string, image) {		
-		this.achievementNotification.showText(string, image);
+		this.notification.showText(string, image, ["is-large"]);
 	}
 
 
@@ -353,7 +352,7 @@ class Achievement {
 	setCookieField(key, value) {
 		let cookie = this.getCookie() != undefined ? this.getCookie() : {};	
 		cookie[key] = value;
-		console.log(cookie);
+		// console.log(cookie);
 		this.setCookie(cookie);
 	}
 
@@ -419,7 +418,7 @@ class ProgressAchievement extends Achievement {
 		this.target = (this.hasCookieField("target") ? this.cookie.target : settings.target);
 		this.notification = settings.notification;
 
-		console.log(this.hasCookieField("value"));
+		// console.log(this.hasCookieField("value"));
 
 		this.setCookieField("value", this.value);		
 		this.setCookieField("target", this.target);
@@ -472,6 +471,7 @@ class ProgressAchievement extends Achievement {
 	 * Check and update the state of the achievement
 	 */
 	checkValue() {
+		console.log(this.notification);
 		if (this.notification) {			
 			this.root.notify(this.name + ": " + this.getProgress());
 		}

@@ -1,4 +1,8 @@
 <?php 
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+
 	include_once "data.php";
 
 	function the_menu($menu) {
@@ -31,5 +35,33 @@
 				}
 			}
 		}
+	}
+	if (!function_exists("str_ends_with")) {
+
+		function str_ends_with($haystack, $needle) {
+			$length = strlen($needle);
+			return $length > 0 ? substr($haystack, -$length) === $needle : true;
+		}
+	}
+
+	function get_images($dir = "./assets/img/", $types = ["jpg", "jpeg", "png", "webm"]) {
+		$all = array();
+		if ($handle = opendir($dir)) {
+
+			while (false !== ($entry = readdir($handle))) {
+	
+					if ($entry != "." && $entry != "..") {
+						foreach($types as $type) {
+							if (str_ends_with($entry, $type)) {
+								array_push($all, $entry);
+								break;
+							}
+						}
+					}
+			}
+	
+			closedir($handle);
+		}
+		return $all;
 	}
 ?>

@@ -44,45 +44,9 @@
 
 </head>
 <body>
+
 	<div class="main-container">
 		<div class="header">		
-			<div class="header-left">
-
-								
-				<input type="checkbox" id="darkModeSwitch" class="darkmode-switch">
-
-				<label for="darkModeSwitch"  tooltip="toggle darkmode">
-					<span class="stars">
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-					</span>
-					<span class="clouds">
-						<span></span>
-						<span></span>
-						<span></span>
-					</span>
-					<span class="dot">
-						<span class="circle"></span>
-						<span class="moon-dot"></span>
-						<span class="sun-rays">
-							<span></span>
-							<span></span>
-							<span></span>
-							<span></span>
-						</span>
-					</span>
-				</label>
-
-			
-			</div>
 					
 			<img class="header_logo" src="assets/img/logo.svg" alt="JossaFossa logo">
 			<span class="header_text textTyper">&nbsp;</span>
@@ -91,9 +55,41 @@
 			<div class="menu-container">
 
 				<div class="menu">
-					<div class="menu_top">
+					<div class="menu-switch">
+						<input type="checkbox" id="darkModeSwitch" class="darkmode-switch">
+
+						<label for="darkModeSwitch"  tooltip="toggle darkmode">
+							<span class="stars">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+							</span>
+							<span class="clouds">
+								<span></span>
+								<span></span>
+								<span></span>
+							</span>
+							<span class="dot">
+								<span class="circle"></span>
+								<span class="moon-dot"></span>
+								<span class="sun-rays">
+									<span></span>
+									<span></span>
+									<span></span>
+									<span></span>
+								</span>
+							</span>
+						</label>
 					</div>
 					<?php the_menu($menu); ?>
-				</div>
+
+					</div>
 			</div>
 			<div class="content">

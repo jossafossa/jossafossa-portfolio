@@ -1,11 +1,18 @@
 class modeSwitcher {
     constructor(element, activeClass, defaultMode = true) {
         this.element = document.querySelectorAll(element);
-        this.state = defaultMode;
+        this.state = this.getDefaultMode();
         this.activeClass = activeClass;
         this.createClickEvent();
         this.setMode(defaultMode);
         this.timer = null;
+    }
+
+    getDefaultMode() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return true;
+        }
+        return false;
     }
 
     createClickEvent() {

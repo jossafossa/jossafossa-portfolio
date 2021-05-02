@@ -1,5 +1,6 @@
 .popup {
   position: fixed;
+  opacity: 0;
   top: 0;
   right: 0;
   display: flex;
@@ -31,4 +32,68 @@
 .popup.active {
   opacity: 1;
   pointer-events: all;
+}
+
+.popup-container {
+  --padding: 0.2rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: var(--padding);
+  width: 100%;
+  max-width: 300px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column-reverse;
+
+  > * {
+    --height: 2rem;
+    height: var(--height);
+    margin-bottom: var(--padding);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    animation: showPopup 2.5s ease forwards;
+    font-size: 80%;
+    padding: 0.5rem 1rem;
+
+    &.is-large {
+      --height: 4rem;
+      background-color: var(--primary);
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    }
+
+    > img {
+      height: 100%;
+    }
+
+    @keyframes showPopup {
+      0% {
+        margin-bottom: var(--padding);
+        margin-top: calc(-1 * var(--height));
+        opacity: 0;
+      }
+      10% {
+        margin-top: 0;
+        margin-bottom: var(--padding);
+        opacity: 1;
+      }
+      90% {
+        margin-top: 0;
+        margin-bottom: var(--padding);
+        opacity: 1;
+      }
+      100% {
+        margin-top: 0;
+        margin-bottom: calc(-1 * var(--height));
+        opacity: 0;
+      }
+    }
+
+    > *:not(:nth-last-child(1)) {
+      margin-right: 1rem;
+    }
+  }
 }

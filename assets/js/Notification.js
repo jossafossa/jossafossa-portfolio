@@ -3,28 +3,29 @@ class Notification {
 		this.element = document.createElement("div");
 		this.element.classList.add("popup");
 		document.body.appendChild(this.element);
-		this.timeout = 5000;
+
+		this.container = document.createElement("div");
+		this.container.classList.add("popup-container");
+		document.body.appendChild(this.container);
+
+		this.timeout = 4000;
 		this.timer;
 	}
 
-	showText(text, image = false) {
-		this.element.innerHTML = "";
+	showText(text, image = false, classes = []) {
+		let element = document.createElement("div");
+		element.classList.add("notification");
+		classes.forEach(e => {element.classList.add(e); });
+		element.innerHTML = "";
+		element.innerHTML += (image) ? `<img src=${image}></img>` : "";
+		element.innerHTML += `<span>${text}</span>`;
+		this.container.appendChild(element);
 
-		if (image != false || image != "") {
-			var popupImage = document.createElement("img");
-			popupImage.src = image;
-			this.element.appendChild(popupImage);
-		}
-
-		var popupText = document.createElement("p");
-		popupText.innerHTML = text;
-		this.element.appendChild(popupText);
-
-		this.show();
-		clearTimeout(this.timer);
-		var self = this;
-		this.timer = setTimeout(function() {self.hide() }, this.timeout);
+		setTimeout(e => {
+			element.remove();
+		}, this.timeout);
 	}
+
 
 	show() {
 		this.element.classList.add("active");
