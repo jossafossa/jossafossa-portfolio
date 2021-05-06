@@ -702,10 +702,26 @@ hr {
 
   > .bar {
     width: 100%;
-    display: block;
-    border: var(--spacing) solid transparent;
-    border-bottom-color: var(--project-color);
-    margin-top: calc(-1 * var(--spacing));
+    top: calc(-1 * var(--spacing));
+    position:relative;
+
+    &:before, &:after {
+      content:"";
+      width: calc(100% - (var(--spacing) * 2));
+      display: block;
+      border: var(--spacing) solid transparent;
+      border-bottom-color: var(--project-color);
+      margin-top: calc(-1 * var(--spacing));
+      position:absolute;
+      top:0;
+      left:0;
+      opacity:0.8
+    }
+
+    &:before {
+      opacity:1;
+      border-bottom-color:black;
+    }
   }
 }
 

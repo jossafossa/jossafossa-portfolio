@@ -1,5 +1,6 @@
 class ImageAnimator {
 	constructor(element, backgrounds, prefix) {
+		this.splash = new Audio('assets/mp3/splash.ogg');
 		this.element = document.querySelectorAll(element)[0];
 		this.backgroundImages = backgrounds;
 		this.prefix = prefix;
@@ -9,12 +10,13 @@ class ImageAnimator {
 		this.x = 0;
 		this.y = 0;
 		this.element.classList.add("image_animator");
+		this.onClick = e => { };
 
 		var self = this;
-		this.element.addEventListener("click", function(e) {
-			  var rect = self.element.getBoundingClientRect();
-			  var x = e.clientX - rect.left; //x position within the element.
-			  var y = e.clientY - rect.top;  //y position within the element.
+		this.element.addEventListener("click", function (e) {
+			var rect = self.element.getBoundingClientRect();
+			var x = e.clientX - rect.left; //x position within the element.
+			var y = e.clientY - rect.top;  //y position within the element.
 			self.loadNewHeader(x, y);
 		})
 	}
@@ -23,18 +25,18 @@ class ImageAnimator {
 		console.log("chaos mode");
 		let index = 0;
 		var self = this;
-		this.element.addEventListener("mousemove", function(e) {
+		this.element.addEventListener("mousemove", function (e) {
 			index++;
 			if (index % 5 === 0) {
-			  var rect = self.element.getBoundingClientRect();
-			  var x = e.clientX - rect.left; //x position within the element.
-			  var y = e.clientY - rect.top;  //y position within the element.
+				var rect = self.element.getBoundingClientRect();
+				var x = e.clientX - rect.left; //x position within the element.
+				var y = e.clientY - rect.top;  //y position within the element.
 				self.loadNewHeader(x, y);
 			}
 		})
 	}
 
-	loadRandomHeader() {		
+	loadRandomHeader() {
 		this.x = Math.random() * this.element.offsetWidth;
 		this.y = Math.random() * this.element.offsetHeight;
 
@@ -42,6 +44,7 @@ class ImageAnimator {
 	}
 
 	loadNewHeader(x, y) {
+		this.onClick();
 		var clip = "clip-path:circle(0% at " + x + "px " + y + "px);";
 		var backgroundElem = document.createElement("div");
 		backgroundElem.classList.add("image");
@@ -50,8 +53,8 @@ class ImageAnimator {
 		this.backgroundQueue.push(backgroundElem);
 
 		var self = this;
-		setTimeout(function() {self.animateLastElement(self.x, self.y)}, 100);
-		setTimeout(function() {self.removeFirstBackgroundElement()}, 3000);
+		setTimeout(function () { self.animateLastElement(self.x, self.y) }, 100);
+		setTimeout(function () { self.removeFirstBackgroundElement() }, 3000);
 	}
 
 	removeFirstBackgroundElement() {
@@ -67,6 +70,6 @@ class ImageAnimator {
 
 	getNextBackground() {
 		this.index = (this.index + 1) % (this.backgroundImages.length);
-		return this.prefix + this.backgroundImages[this.index];	
+		return this.prefix + this.backgroundImages[this.index];
 	}
 }
