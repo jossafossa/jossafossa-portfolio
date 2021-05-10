@@ -9,8 +9,8 @@ class modeSwitcher {
     }
 
     getDefaultMode() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return true;
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            return true;
         }
         return false;
     }
@@ -37,14 +37,14 @@ class modeSwitcher {
 
         if (mode) {
             document.body.classList.add(this.activeClass);
-        } else {            
-            document.body.classList.remove(this.activeClass); 
+        } else {
+            document.body.classList.remove(this.activeClass);
         }
 
         var self = this;
 
         clearTimeout(this.timer);
-        this.timer  = setTimeout(function() {self.stopTransition()}, 1000);
+        this.timer = setTimeout(function () { self.stopTransition() }, 1000);
     }
 
     stopTransition() {
@@ -54,4 +54,4 @@ class modeSwitcher {
 
 }
 
-console.log("henk"); 
+console.log("henk");
