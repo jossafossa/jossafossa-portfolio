@@ -23,28 +23,93 @@
 
 // achievementSystem.update();  
 
+class Sound {
+	constructor(url, vol = 1) {
+		this.loaded = false;
+		this.vol = vol;
+
+		// Support prefixed AudioContext used in Safari and old Chrome versions.
+		const AudioContext = window.AudioContext || window.webkitAudioContext;
+		const context = new AudioContext();
+
+		let gainNode = context.createGain(); // Create a gainNode reference.
+		gainNode.connect(context.destination); // Add context to gainNode
+		gainNode.gain.value = 0.1;
+
+		// Polyfill for old callback-based syntax used in Safari.
+		if (context.decodeAudioData.length !== 1) {
+			const originalDecodeAudioData = context.decodeAudioData.bind(context);
+			context.decodeAudioData = buffer =>
+				new Promise((resolve, reject) =>
+					originalDecodeAudioData(buffer, resolve, reject)
+				);
+		}
+
+		const $audio = document.createElement("audio");
+		let extension = null;
+
+		if ($audio.canPlayType('audio/webm; codecs=vorbis')) {
+			extension = 'webm';
+		} else if ($audio.canPlayType('audio/mp4; codecs=mp4a.40.5')) {
+			extension = 'm4a';
+		} else if ($audio.canPlayType('audio/wav; codecs=1')) {
+			extension = 'wav';
+		}
+
+		function loadSample(url) {
+			return fetch(url)
+				.then(response => response.arrayBuffer())
+				.then(buffer => context.decodeAudioData(buffer));
+		}
+
+
+		loadSample(url)
+			.then(sample => {
+				this.sample = sample;
+				this.context = context;
+				this.loaded = true;
+				this.gainNode = gainNode;
+				console.log(sample);
+			})
+
+		// function play(sample, rate) {
+		// 	const source = context.createBufferSource();
+		// 	source.buffer = sample;
+		// 	source.playbackRate.value = rate;
+		// 	source.connect(context.destination);
+		// 	source.start(0);
+		// }
+
+	}
+
+	play(rate) {
+		if (this.loaded) {
+
+			const source = this.context.createBufferSource();
+			source.buffer = this.sample;
+			source.playbackRate.value = rate;
+			source.connect(this.context.destination);
+
+			source.connect(this.gainNode);   //Connecting gain to source
+			this.gainNode.gain.value = this.vol;  // 100% VOLUME RANGE OF VALUE IS 0-1
+
+			source.start(0);
+		}
+	}
+}
 
 
 // annoying sounds
-var click = new Audio('assets/mp3/click2.mp3');
-var splash = new Audio('assets/mp3/splash.ogg');
-var key = new Audio('assets/mp3/key.mp3');
+var click = new Sound('assets/mp3/click2.mp3', 0.1);
+var splash = new Sound('assets/mp3/splash.mp3');
+var key = new Sound('assets/mp3/key.mp3');
+var space = new Sound('assets/mp3/space.mp3');
 let playing = false;
-document.addEventListener("click", e => spamProofPlay(click));
+document.addEventListener("mousedown", e => spamProofPlay(click, 1));
+document.addEventListener("mouseup", e => spamProofPlay(click, 0.8));
 
 function spamProofPlay(audio, rate = 0.5) {
-	console.log(rate);
-	if (playing) {
-		let clone = audio.cloneNode();
-		clone.playbackRate = rate;
-		clone.play();
-	} else {
-		audio.playbackRate = rate;
-		audio.play();
-		setTimeout(e => {
-			playing = true;
-		}, 500);
-	}
+	audio.play(rate);
 }
 
 function playRandom(audio, min, max) {
@@ -83,7 +148,7 @@ var backgroundImages = [
 ];
 
 var headerBackgrounds = new ImageAnimator(".header", backgroundImages, "assets/img/bg/compressed/");
-headerBackgrounds.onClick = e => { spamProofPlay(splash); console.log("whoo") };
+headerBackgrounds.onClick = e => playRandom(splash, 0.2, 0.9);
 
 headerBackgrounds.loadRandomHeader();
 
@@ -105,7 +170,7 @@ if (allAboutPhotos !== undefined) {
 }
 
 var aboutPhoto = new ImageAnimator(".about_photo", aboutPhotos, "./assets/img/ik/");
-aboutPhoto.onClick = e => { spamProofPlay(splash); console.log("whoo") };
+aboutPhoto.onClick = e => playRandom(splash, 1, 1.5);
 
 aboutPhoto.loadRandomHeader();
 
@@ -120,7 +185,7 @@ let timeout;
 let menuItems = document.querySelectorAll(".menu_item");
 for (let item of menuItems) {
 	item.addEventListener("click", e => {
-		splash.play();
+		playRandom(splash, .3, 1);
 		let container = item.closest(".menu");
 		let containerContainer = item.closest(".menu-container");
 		containerContainer.style.transitionDuration = "0s";
@@ -204,7 +269,21 @@ var toolTips = new toolTipController("tooltip");
 
 /* TEXTTYPER */
 var typer = new TextTyper({ typeSpeed: 20, minTypeSpeed: 20, removeSpeed: 100, removeSpeedMax: 20 });
+// let typeIndex = 0;
+// typer.onType = e => {
+// 	typeIndex++;
+// 	if (typeIndex % 2 == 0) {
+// 		playRandom(key, 0.7, 0.9);
+// 	}
+// };
+// typer.onSpace = e => space.play(1);
 
+// typer.onBackSpace = e => {
+// 	typeIndex++;
+// 	if (typeIndex % 3 == 0) {
+// 		playRandom(key, 0.7, 0.7);
+// 	}
+// };
 var headLines = [
 	/* Welcome to my portfolio */
 	"Welcome people of this world",
@@ -293,7 +372,7 @@ allAchievement.addEventListener("achieved", function () {
 	var audio = new Audio('assets/mp3/victory.mp3');
 	let event = document.addEventListener("mousemove", e => {
 		audio.play();
-		document.removeEventListener(event);
+		document.removeEventListener("mousemove", event);
 	})
 });
 
