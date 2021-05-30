@@ -36,20 +36,20 @@ let defaultLevel = `10 10
 ] . . . . | , . . [
 ] . . P . | . . H [
 + - - - - - - - - +
-0 -1
-0 -1
-0 -1
-0 -1
-0 -1
-0 -1
-0 -1
 -1 0
 -1 0
 -1 0
 -1 0
 -1 0
 -1 0
--1 0`;
+-1 0
+0 -1
+0 -1
+0 -1
+0 -1
+0 -1
+0 -1
+0 -1`;
 
 loadButton.addEventListener("click", e => {
   width = parseInt(widthInput.value);
