@@ -91,27 +91,31 @@ function loadLevel(str) {
     }
   }
   console.log(bottom.length > height);
+
+  // hero path
   if (bottom.length > height) {
     console.log(bottom);
     let hp = bottom.slice(height, bottom.length);
-    let x = heroPos[1];
-    let y = heroPos[0];
-    let prevX = heroPos[1];
-    let prevY = heroPos[0];
+    let x = heroPos[0];
+    let y = heroPos[1];
+    let prevX = heroPos[0];
+    let prevY = heroPos[1];
     // hero path
     for (let hprow of hp) {
 
       if (heroPos.length > 0 && hp.length > 0) {
         hprow = hprow.split("\n");
+
         for (let path of hprow) {
           let _items = path.split(" ");
+          _items = _items.reverse();
           let items = [];
           for (let item of _items) {
             items.push(parseInt(item));
           }
 
-          let newX = prevX + items[1];
-          let newY = prevY + items[0];
+          let newX = prevX + items[0];
+          let newY = prevY + items[1];
           
           let index = newX + newY * rows.length;
           let col = columns[index];
@@ -120,7 +124,11 @@ function loadLevel(str) {
           prevY = newY; 
 
           console.log(newX, newY, col);  
-          col.classList.add("hero-path");     
+          col.classList.add("hero-path"); 
+          // items = items.reverse();
+
+
+          
           heroPath.push(items);
         }
       }
@@ -257,6 +265,7 @@ function updateBoard() {
     value += "\n";
     for (let index in heroPath) {
       let path = heroPath[index];
+      path = path.reverse();
       let row = path.join(" ");
       row = row.trim();
       value += row;
@@ -317,7 +326,7 @@ heroPathButton.addEventListener("click", e => {
           let offsetY = y - prevY;
           prevX = x;
           prevY = y;
-          heroPath.push([offsetX, offsetY]);
+          heroPath.push([offsetY, offsetX]);
           col.classList.add("hero-path");
         }
       })
