@@ -36,6 +36,7 @@ class TextTyper {
 		this.text = "";
 
 		this.onType = e => { };
+		this.onSpace = e => { };
 		this.onBackSpace = e => { };
 
 	}
@@ -107,6 +108,9 @@ class TextTyper {
 		this.text += letter;
 		this.updateText();
 		this.onType();
+		if (letter == " ") {
+			this.onSpace();
+		}
 	}
 
 	removeText(callback = false, index = 0) {
