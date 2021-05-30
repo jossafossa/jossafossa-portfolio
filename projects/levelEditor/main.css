@@ -26,8 +26,7 @@ input {
 }
 
 textarea {
-  overflow-x:auto;
-  overflow-y: hidden;
+  overflow:auto;
   min-height: 300px;
 }
 
