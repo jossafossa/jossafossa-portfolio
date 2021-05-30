@@ -94,10 +94,10 @@ function loadLevel(str) {
   if (bottom.length > height) {
     console.log(bottom);
     let hp = bottom.slice(height, bottom.length);
-    let x = heroPos[0];
-    let y = heroPos[1];
-    let prevX = heroPos[0];
-    let prevY = heroPos[1];
+    let x = heroPos[1];
+    let y = heroPos[0];
+    let prevX = heroPos[1];
+    let prevY = heroPos[0];
     // hero path
     for (let hprow of hp) {
 
@@ -110,8 +110,8 @@ function loadLevel(str) {
             items.push(parseInt(item));
           }
 
-          let newX = prevX + items[0];
-          let newY = prevY + items[1];
+          let newX = prevX + items[1];
+          let newY = prevY + items[0];
           
           let index = newX + newY * rows.length;
           let col = columns[index];
@@ -317,7 +317,7 @@ heroPathButton.addEventListener("click", e => {
           let offsetY = y - prevY;
           prevX = x;
           prevY = y;
-          heroPath.push([offsetY, offsetX]);
+          heroPath.push([offsetX, offsetY]);
           col.classList.add("hero-path");
         }
       })
