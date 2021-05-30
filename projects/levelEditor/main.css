@@ -4,7 +4,12 @@
 body {
   margin:0;
   padding:0;
-  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -35,10 +40,6 @@ button {
 
 * {
   -webkit-user-drag: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
 }
 
 .tile-container {
@@ -85,15 +86,20 @@ h2 {
   cursor: pointer;
 }
 
+.tileset > * > img {
+  width:100%;
+}
+
 .tileset > *.is-active {
   box-shadow: 0 0 0 4px red;
 }
 
 .tilemap {
+  padding:1rem;
   display:flex;
   flex-direction:column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   -webkit-user-drag: none;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -139,4 +145,8 @@ h2 {
 button.is-active {
   background-color: green;
   color:white;
+}
+
+.is-empty > img{
+  opacity: 0;
 }

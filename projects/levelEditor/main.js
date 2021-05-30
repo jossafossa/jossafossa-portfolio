@@ -29,11 +29,11 @@ let defaultLevel = `10 10
 + _ _ _ _ _ _ _ _ +
 ] G . . . . . , . [
 ] . . . ╔ ▄ ╗ . . [
-] D = B ║ E ║ . . [
+] = = . ║ E ║ . . [
 ] , . . ║ | ║ . . [
 ] . . . v | . , . [
 ] . . . ║ | . . . [
-] K . . . | , . . [
+] . . . . | , . . [
 ] . . P . | . . H [
 + - - - - - - - - +
 0 -1
@@ -176,8 +176,8 @@ function setTile(col, x, y) {
   col.dataset.tile=selectedTile.key;
   board[y][x] = selectedTile.key;
   console.log(col);
-  if (selectedTile.tile !== "") {
-      col.innerHTML = "<img src=" + imageFolder + selectedTile.tile + ">";
+  if (selectedTile.tile !== "empty.png") {
+    col.innerHTML = "<img src=" + imageFolder + selectedTile.tile + ">";
     } else {
       col.innerHTML = "";
     }
@@ -185,7 +185,7 @@ function setTile(col, x, y) {
 }
 
 let tiles = {
-  ".": "",
+  ".": "empty.png",
   "╔": "tilemap_22.png",
   "╗": "tilemap_21.png",
   "║": "tilemap_20.png",
@@ -218,10 +218,15 @@ let tiles = {
 }
 let tileElements = [];
 for (let [key, tile] of Object.entries(tiles)) {
-  let tileElement = document.createElement("img");
+  let tileElement = document.createElement("div");
+  let tileImage = document.createElement("img");
   tileElements.push(tileElement);
   // console.log(key, tile);
-  tileElement.src = imageFolder + tile;
+  tileImage.src = imageFolder + tile;
+  if (tile == "empty.png") {
+    tileElement.classList.add("is-empty");
+  }
+  tileElement.appendChild(tileImage);
   tileset.appendChild(tileElement);
   tileElement.addEventListener("click", e => {
     disablePath();
@@ -279,14 +284,14 @@ heroPathButton.addEventListener("click", e => {
       col.addEventListener("mousedown", e => {
         if (!heroPathDrag) {
 
+          if (col.dataset.tile == "H") {
           let x = parseInt(index / width);
           let y = index % width; 
           prevX = x;
           prevY = y;
-          if (col.dataset.tile == "H") {
-            heroPathDrag = true;
             heroPath = [];
             resetPath();
+            heroPathDrag = true;
           }
         }
       })
@@ -299,9 +304,9 @@ heroPathButton.addEventListener("click", e => {
           } else {
             resetPath();
           }
-          heroPathDrag = false;
           console.log("mouseup", heroPathDrag);
         }
+        heroPathDrag = false;
       })
       col.addEventListener("mousemove", e => {
         let x = parseInt(index / width);
