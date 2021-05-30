@@ -221,8 +221,8 @@ let tiles = {
   "P": "player.png",
   "v": "tilemap_34.png",
   "^": "tilemap_32.png",
-  "<": "tilemap_33.png",
-  ">": "tilemap_31.png",
+  ">": "tilemap_33.png",
+  "<": "tilemap_31.png",
 }
 let tileElements = [];
 for (let [key, tile] of Object.entries(tiles)) {
