@@ -277,25 +277,31 @@ heroPathButton.addEventListener("click", e => {
     for (let index in columns) {
       let col = columns[index];
       col.addEventListener("mousedown", e => {
-        let x = parseInt(index / width);
-        let y = index % width; 
-        prevX = x;
-        prevY = y;
-        if (col.dataset.tile == "H") {
-          heroPathDrag = true;
-          heroPath = [];
-          resetPath();
+        if (!heroPathDrag) {
+
+          let x = parseInt(index / width);
+          let y = index % width; 
+          prevX = x;
+          prevY = y;
+          if (col.dataset.tile == "H") {
+            heroPathDrag = true;
+            heroPath = [];
+            resetPath();
+          }
         }
       })
       col.addEventListener("mouseup", e => {
-        if (col.dataset.tile == "G") {
-          updateBoard();
-          savePath();
-        } else {
-          resetPath();
+        if (heroPathActive) {
+
+          if (col.dataset.tile == "G") {
+            updateBoard();
+            savePath();
+          } else {
+            resetPath();
+          }
+          heroPathDrag = false;
+          console.log("mouseup", heroPathDrag);
         }
-        heroPathDrag = false;
-        console.log("mouseup", heroPathDrag);
       })
       col.addEventListener("mousemove", e => {
         let x = parseInt(index / width);
