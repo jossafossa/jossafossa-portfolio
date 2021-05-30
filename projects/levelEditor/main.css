@@ -10,6 +10,7 @@ body {
       image-rendering: -o-pixelated;
       image-rendering: pixelated;
 
+      background-color: rgba(0,0,0,0.8);
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -25,7 +26,8 @@ input {
 }
 
 textarea {
-  overflow:auto;
+  overflow-x:auto;
+  overflow-y: hidden;
   min-height: 300px;
 }
 
@@ -84,14 +86,24 @@ h2 {
   width:50px;
   margin:.5rem;
   cursor: pointer;
+  transition:.25s ease;
+  transform:scale(1);
 }
 
 .tileset > * > img {
   width:100%;
+  display:block;
+}
+
+.tileset > *:hover {
+  transform:scale(1.05);
+
 }
 
 .tileset > *.is-active {
-  box-shadow: 0 0 0 4px red;
+  border-radius:1px;
+  box-shadow: 0 0 0 4px white;
+  transform:scale(1.05);
 }
 
 .tilemap {
@@ -115,10 +127,17 @@ h2 {
 
 .tile-col {
   flex:1;
-  border:1px solid black;
+  border:1px solid rgba(255,255,255, 1);
   width: var(--size);
   height:var(--size);
-
+  min-width: 30px;
+  min-height: 30px;
+  transform:scale(1);
+  transition:.25s ease;
+  cursor:pointer;
+}
+.tile-col:hover {
+  transform:scale(1.05);
 }
 
 .tile-col > img {

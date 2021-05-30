@@ -146,7 +146,7 @@ body.addEventListener("mouseup", e => {
 
 function createBoard(width, height) {
   console.log(width, height);
-  body.style.setProperty("--size", `calc(${80 / height}vmin - (2rem / ${height}))`);
+  body.style.setProperty("--size", `calc(${100 / height}vmin - 2px - (2rem / ${height}))`);
   board = [];
   tilemap.innerHTML = "";
   columns = [];
