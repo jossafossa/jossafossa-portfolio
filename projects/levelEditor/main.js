@@ -19,6 +19,12 @@ let heroPath = [];
 let prevX = -1;
 let prevY = -1;
 
+// disable drag 
+function noDrag(event) {
+  event.preventDefault();
+}
+document.addEventListener('dragstart',noDrag,true);
+
 let defaultLevel = `10 10
 + _ _ _ _ _ _ _ _ +
 ] G . . . . . , . [
@@ -168,12 +174,14 @@ function createBoard(width, height) {
 function setTile(col, x, y) {
   console.log(selectedTile);
   col.dataset.tile=selectedTile.key;
+  board[y][x] = selectedTile.key;
+  console.log(col);
   if (selectedTile.tile !== "") {
-    board[y][x] = selectedTile.key;
-    console.log(col);
       col.innerHTML = "<img src=" + imageFolder + selectedTile.tile + ">";
-      updateBoard();
+    } else {
+      col.innerHTML = "";
     }
+    updateBoard();
 }
 
 let tiles = {
@@ -216,6 +224,7 @@ for (let [key, tile] of Object.entries(tiles)) {
   tileElement.src = imageFolder + tile;
   tileset.appendChild(tileElement);
   tileElement.addEventListener("click", e => {
+    disablePath();
     tileElements.forEach(e => e.classList.remove("is-active"))
     tileElement.classList.add("is-active");
     selectedTile = {key, tile};
@@ -313,6 +322,11 @@ function resetPath() {
   for (let col of columns) {
     col.classList.remove("hero-path");
   }
+}
+
+function disablePath() {
+  heroPathActive = false;
+  heroPathButton.classList.remove("is-active");
 }
 
 function savePath() {
