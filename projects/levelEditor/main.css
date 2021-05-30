@@ -166,5 +166,5 @@ button.is-active {
 }
 
 .is-empty > img{
-  opacity: 0;
+  /* opacity: 0; */
 }
